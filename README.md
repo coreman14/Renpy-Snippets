@@ -7,3 +7,4 @@
 - [ ] Populate a filter tab that loads all tags/categories/authors, the works
 - [ ] Implement the syntax highlighter. You can't edit directly in a syntax highlight, so we have to do some weird CSS tricks or something.
 - [ ] Add some sort of suspense/loading state to the edit/create form and the delete button
+- [ ] Add download button that gives the project back as proper files in a zip

@@ -11,13 +11,14 @@ export default function CreateOrEditSnippet(props: {
     entry_files: (typeof renpyfilesTable.$inferSelect)[];
     entry?: (typeof renpyTable.$inferSelect);
 }) {
-  //TODO: We need to do a cookie check here to make sure that the user cannot edit someone else work. If they do it should redirect them to the viewing page for it
   //TODO: For addtional tags, we should add a ? button that when you hover will tell you all the things, "Addtional index for search", "You can enter multiple tags by seperating them with commas"
   //TODO: Because I dont want to add extra validation, since all I care about is that the title is entered, we will have to add some CSS for the tab as I have replaced all buttons with spans cause it causes the title to get mad and say it's required
   const [files, setFiles] = useState(props.entry_files);
   const [currentTab, setCurrentTab] = useState(0);
+  const [editfileName, setEditfileName] = useState(false);
   const formActionWithFiles = props.form_action.bind(null, files);
   const createNewFile = function () {
+    setEditfileName(false);
     const newObject = structuredClone(props.default_file_object);
     let file_name = files.filter((x) => x.cdate != -1).length
     newObject.filename = file_name + ".rpy"
@@ -28,6 +29,11 @@ export default function CreateOrEditSnippet(props: {
     newObject.code = "" + file_name
     setFiles(files.concat(newObject))
     setCurrentTab(files.length)
+  }
+  const editFileName = function(new_name: string, ind: number){
+    const file = files[ind]
+    file.filename = new_name;
+    setFiles(files.concat())
   }
   const removeFile = function (ind: number) {
     if (currentTab == ind){
@@ -61,23 +67,40 @@ export default function CreateOrEditSnippet(props: {
   The comforts are:
     Tab should insert 4 spaces/whatever is need to make the next multiple instead of changing focus, with shift-tab decreasing the spaces to a multiple of 4
     If enter is pressed right after a ":", we should insert 4 spaces/whatever is need to make the next multiple of 4.
+  TODO: Throw some logic at the input for changing the file name, so it matches the size of the text, that way, it doesn't grow or shrink the tab\
+  TODO: Could we do our own line numbers on the second text area? Probaly shouldn't try till syntax highlighter works
   */
+ 
   return (
-    <form action={formActionWithFiles}>
+    <form action={formActionWithFiles} className="text-cyan-500 m-2">
     <input type="hidden" name="id" id="id" value={props.entry?.id}></input>
     <h1>You are now editing a snippet</h1>
     <br/>
     <br/>
     <div className="tab">
-      {files.map((x, ind) => x.cdate == -1 ? "" : <span key={ind}><span className={"tablinks" + (currentTab == 0 ? " active" : "")}
-      onClick={() => setCurrentTab(ind)}
-      >
+      {files.map((x, ind) => x.cdate == -1 ? "" : <span key={ind}>
+        {editfileName && ind == currentTab ? <input autoFocus className="tablinks text-red-700"
+        value={x.filename}
+        onInput={(e) => editFileName(e.currentTarget.value, ind)}
+        onBlur={() => setEditfileName(false)}
+        onKeyDown={(e) => {if (e.key == "Escape") {
+          setEditfileName(false)
+        }
+        else if (e.key == "Enter") {e.preventDefault(); setEditfileName(false)}}}
+        >
+        </input> :
+        <span className={"tablinks" + (currentTab == ind ? " text-red-700" : " ")}
+        onClick={() => {setCurrentTab(ind); setEditfileName(false)}}
+        onDoubleClick={() => setEditfileName(a => !a)}
+        >
         {x.filename} 
-        </span>
+        </span>}
         {files.filter((x) => x.cdate != -1).length > 1 &&<span onClick={() => removeFile(ind)}>x</span>}</span>)}
         <span key="newTab" className="tablinks" onClick={() => createNewFile()}>__++</span>
     </div>
-    <div><textarea rows={10} cols={50} className="codePlace text-red-600" value={files[currentTab].code} onInput={(e) => updateCode(e.currentTarget.value, currentTab)} onChange={(e) => typedCode(e)}></textarea>
+    <div>
+      <textarea rows={10} cols={3} inert className="resize-none absolute bg-black text-white overflow-hidden text-right pr-1" defaultValue={Array(100).keys().map(n => n + 1 + "\n").toArray().join("") + ""}></textarea>
+      <textarea rows={10} cols={50} className="codePlace pl-7" value={files[currentTab].code} onInput={(e) => updateCode(e.currentTarget.value, currentTab)} onChange={(e) => typedCode(e)}></textarea>
     {/* <SyntaxHighligher language="renpy" style={dracula}>{files[currentTab].code}</SyntaxHighligher> */}
     {/*TODO: We are gonna ignore the syntax highlighting for now as it's not as seemless as I wanted it to be. Lets get the app working so visual can come later */}
     </div>
@@ -89,7 +112,6 @@ export default function CreateOrEditSnippet(props: {
     <label htmlFor="tags">Additional Tags: </label><input type="text" name="tags" id="tags" placeholder="Use commas to enter multiple tags" defaultValue={props.entry?.tags || ""}></input><br/><br/>
     <label htmlFor="description">Description: </label><textarea name="description" id="description" defaultValue={props.entry?.description || ""}></textarea><br/><br/>
     <input type="submit"/>
-    
     </form>
 
   );
