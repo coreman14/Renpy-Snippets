@@ -2,11 +2,11 @@
 
 import { cookies } from 'next/headers'
 import { redirect } from "next/navigation";
-import { db, DB_renpyFileTable, renpyFilesCreateForm, renpyfilesTable, renpyTable } from "@/db/schema";
+import { db, DB_renpyFileTable, renpyfilesTable, renpyTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { randomUUID } from 'crypto'
 
-export async function uploadPost(files: renpyFilesCreateForm[], formData: FormData){
+export async function createSnippet(files: DB_renpyFileTable[], formData: FormData){
     const cookiesStore = await cookies();
     if (!cookiesStore.get("userId")){
       cookiesStore.set("userId", randomUUID().toString(), {maxAge: 999999999999999})
@@ -20,13 +20,13 @@ export async function uploadPost(files: renpyFilesCreateForm[], formData: FormDa
       cookie_id : cookiesStore.get("userId")?.value
     }
     const new_id = (await db.insert(renpyTable).values(new_entry).returning({insertedId: renpyTable.id}))[0].insertedId
-    const new_files = files.map((x) => ({code: x.code, filename: x.filename || x.default_filename, snippet_id: new_id}));
+    const new_files = files.map((x) => ({code: x.code, filename: x.filename, snippet_id: new_id}));
     await db.insert(renpyfilesTable).values(new_files)
     redirect("/entry/" + new_id)
     
 }
 
-export async function editPost(files: DB_renpyFileTable[], formData: FormData){
+export async function editSnippet(files: DB_renpyFileTable[], formData: FormData){
   //1. We need the ID to do a edit on. Hidden value
   //Info data part is easy, grab values from fourm then update with the correct ID
   //2. 3 types of files. Premade that we edit, new files, premade that we remove.
@@ -62,7 +62,7 @@ export async function editPost(files: DB_renpyFileTable[], formData: FormData){
   redirect("/entry/" + id)
 }
 
-export async function deletePost(formData: FormData){
+export async function deleteSnippet(formData: FormData){
   const id = Number.parseInt(formData.get("id")?.toString() || "-1")
   await db.delete(renpyfilesTable).where(eq(renpyfilesTable.snippet_id, id))
   await db.delete(renpyTable).where(eq(renpyTable.id, id))

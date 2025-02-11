@@ -1,8 +1,9 @@
 import { cookies } from 'next/headers'
-import { renpyTable, db, renpyfilesTable } from "@/db/schema";
+import { renpyTable, db, renpyfilesTable, renpyFileDefaultNewFile } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import EditSnippet from "./edit_page";
 import { redirect } from 'next/navigation';
+import CreateOrEditSnippet from '@/app/components/createSnippet';
+import { editSnippet } from '@/app/api';
 export default async function ViewEntry(props: {
   params: Promise<{ id: number }>;
 }) {
@@ -15,6 +16,6 @@ export default async function ViewEntry(props: {
   if (entry[0].cookie_id != (await cookies()).get("userId")?.value){
     redirect("/browse")
   }
-  return <EditSnippet entry={entry[0]} entry_files={entry_files}/>
+  return <CreateOrEditSnippet entry={entry[0]} entry_files={entry_files} default_file_object={renpyFileDefaultNewFile} form_action={editSnippet}></CreateOrEditSnippet>
 
 }

@@ -31,17 +31,6 @@ export const renpyTableFileRelations = relations(renpyTable, ({ many}) => ({
 )
 export type DB_renpyTable = typeof renpyTable.$inferSelect;
 
-export interface renpyFilesCreateForm {
-    id? : number,
-    snippet_id? : number,
-    filename: string | undefined, //User provided name
-    default_filename: string, //Default name. This is only for the first entry and will be ignored in other files
-    code : string,
-    mdate : number,
-    deleted? : boolean,
-    cdate? : number,
-}
-
 export const renpyfilesTable = sqliteTable("renpy_snippet_files", {
     id: int().primaryKey({autoIncrement: true}),
     snippet_id: int(), //Forgien key to RenpyTable
@@ -58,3 +47,5 @@ export const renpyFileTableRelations = relations(renpyfilesTable, ({one}) => ({
     })
 }))
 export type DB_renpyFileTable = typeof renpyfilesTable.$inferSelect;
+
+export const renpyFileDefaultNewFile: DB_renpyFileTable = {filename: "", code: "label default_label:\n    john 'It's the start of somethign new'", mdate: 0, cdate: 0, snippet_id: 0, id: -1}
