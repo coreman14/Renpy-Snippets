@@ -9,9 +9,9 @@ export default function CreateOrEditSnippet(props: {
     form_action: (files : (typeof renpyfilesTable.$inferSelect)[], formData: FormData) => Promise<void>;
     entry_files: (typeof renpyfilesTable.$inferSelect)[];
     entry?: (typeof renpyTable.$inferSelect);
+    editing?: boolean;
 }) {
   //TODO: For addtional tags, we should add a ? button that when you hover will tell you all the things, "Addtional index for search", "You can enter multiple tags by seperating them with commas"
-  //TODO: Because I dont want to add extra validation, since all I care about is that the title is entered, we will have to add some CSS for the tab as I have replaced all buttons with spans cause it causes the title to get mad and say it's required
   const [files, setFiles] = useState(props.entry_files);
   const [currentTab, setCurrentTab] = useState(0);
   const [editfileName, setEditfileName] = useState(false);
@@ -77,7 +77,7 @@ export default function CreateOrEditSnippet(props: {
   return (
     <form action={formActionWithFiles} className="text-cyan-500 m-2">
     <input type="hidden" name="id" id="id" value={props.entry?.id}></input>
-    <h1>You are now editing a snippet</h1>
+    <h1>{props.editing ? "Create new snippet" : "Editing Snippet" }</h1>
     <br/>
     <br/>
     <div className="tab">
@@ -114,14 +114,16 @@ export default function CreateOrEditSnippet(props: {
     <label htmlFor="catagory">Catagory: </label><input type="text" name="catagory" id="catagory" defaultValue={props.entry?.catagory || ""}></input><br/><br/>
     <label htmlFor="tags">Additional Tags: </label><input type="text" name="tags" id="tags" placeholder="Use commas to enter multiple tags" defaultValue={props.entry?.tags || ""}></input><br/><br/>
     <label htmlFor="description">Description: </label><textarea name="description" id="description" defaultValue={props.entry?.description || ""}></textarea><br/><br/>
-    <SubmitButton/>
+    <SubmitButton editMode={props.editing}/>
     </form>
 
   );
 }
 
 
-function SubmitButton() {
+function SubmitButton(props: {
+  editMode?: boolean;
+}) {
   const { pending } = useFormStatus();
-  return <button type="submit" disabled={pending} className="disabled:text-black">{pending ? "Uploading" : "Create"}</button>
+  return <button type="submit" disabled={pending} className="disabled:text-black">{pending ? "Uploading" : props.editMode ? "Create" : "Submit Changes" }</button>
 }

@@ -2,7 +2,7 @@ import { cookies } from 'next/headers'
 import { renpyTable, db, renpyfilesTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { redirect } from 'next/navigation';
-import CreateOrEditSnippet from '@/app/components/createSnippet';
+import CreateOrEditSnippet from '@/app/components/createEditSnippet';
 import { editSnippet } from '@/app/api';
 export default async function ViewEntry(props: {
   params: Promise<{ id: number }>;

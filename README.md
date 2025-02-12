@@ -1,5 +1,5 @@
 ## To-do List
-- [ ] Better API validation. API does not do any checking/error messaging if something goes wrong
+- [I] Better API validation. Ignoring due to the hole I dug myself in with a single component for 2 form actions + how do you bind it after?
 - [ ] Add some comforts to the file text area (Tab should insert up to 4 spaces to match indents + auto space when : at end of line)
 - [ ] Button that makes the current user only able to see their snippets in the browse page
 - [ ] Search bar. On browse page → Filter results, Any other page → switch to browse page with results filtered
