@@ -3,7 +3,7 @@
 // import { agate as dracula } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import { ChangeEvent, useRef, useState } from "react";
 import { renpyFileDefaultNewFile, renpyfilesTable, renpyTable } from "@/db/schema";
-
+import { useFormStatus } from "react-dom";
 
 export default function CreateOrEditSnippet(props: {
     form_action: (files : (typeof renpyfilesTable.$inferSelect)[], formData: FormData) => Promise<void>;
@@ -15,7 +15,8 @@ export default function CreateOrEditSnippet(props: {
   const [files, setFiles] = useState(props.entry_files);
   const [currentTab, setCurrentTab] = useState(0);
   const [editfileName, setEditfileName] = useState(false);
-  const lineNumber = useRef(document.createElement("textarea"));
+
+  const lineNumber = useRef<HTMLTextAreaElement>(null);
   const formActionWithFiles = props.form_action.bind(null, files);
   const createNewFile = function () {
     setEditfileName(false);
@@ -63,7 +64,7 @@ export default function CreateOrEditSnippet(props: {
     return e;
   }
   const autoScroll = function(scrollToMatch: number){
-    lineNumber.current.scrollTo(0, scrollToMatch);
+    lineNumber.current!.scrollTo(0, scrollToMatch);
   }
   /*
   TODO: I want to add some comforts to the textarea incase the user chooses to write the code in it.
@@ -113,8 +114,14 @@ export default function CreateOrEditSnippet(props: {
     <label htmlFor="catagory">Catagory: </label><input type="text" name="catagory" id="catagory" defaultValue={props.entry?.catagory || ""}></input><br/><br/>
     <label htmlFor="tags">Additional Tags: </label><input type="text" name="tags" id="tags" placeholder="Use commas to enter multiple tags" defaultValue={props.entry?.tags || ""}></input><br/><br/>
     <label htmlFor="description">Description: </label><textarea name="description" id="description" defaultValue={props.entry?.description || ""}></textarea><br/><br/>
-    <input type="submit"/>
+    <SubmitButton/>
     </form>
 
   );
+}
+
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return <button type="submit" disabled={pending} className="disabled:text-black">{pending ? "Uploading" : "Create"}</button>
 }
