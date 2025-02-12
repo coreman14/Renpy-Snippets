@@ -1,12 +1,11 @@
 'use client'
 // import SyntaxHighligher from "react-syntax-highlighter"
 // import { agate as dracula } from 'react-syntax-highlighter/dist/esm/styles/hljs'
-import { ChangeEvent, useState } from "react";
-import { renpyfilesTable, renpyTable } from "@/db/schema";
+import { ChangeEvent, useRef, useState } from "react";
+import { renpyFileDefaultNewFile, renpyfilesTable, renpyTable } from "@/db/schema";
 
 
 export default function CreateOrEditSnippet(props: {
-    default_file_object:  (typeof renpyfilesTable.$inferSelect);
     form_action: (files : (typeof renpyfilesTable.$inferSelect)[], formData: FormData) => Promise<void>;
     entry_files: (typeof renpyfilesTable.$inferSelect)[];
     entry?: (typeof renpyTable.$inferSelect);
@@ -16,10 +15,11 @@ export default function CreateOrEditSnippet(props: {
   const [files, setFiles] = useState(props.entry_files);
   const [currentTab, setCurrentTab] = useState(0);
   const [editfileName, setEditfileName] = useState(false);
+  const lineNumber = useRef(document.createElement("textarea"));
   const formActionWithFiles = props.form_action.bind(null, files);
   const createNewFile = function () {
     setEditfileName(false);
-    const newObject = structuredClone(props.default_file_object);
+    const newObject = structuredClone(renpyFileDefaultNewFile);
     let file_name = files.filter((x) => x.cdate != -1).length
     newObject.filename = file_name + ".rpy"
     while (files.map((x) => x.filename).includes(newObject.filename)){
@@ -62,13 +62,15 @@ export default function CreateOrEditSnippet(props: {
   const typedCode = function(e: ChangeEvent){
     return e;
   }
+  const autoScroll = function(scrollToMatch: number){
+    lineNumber.current.scrollTo(0, scrollToMatch);
+  }
   /*
   TODO: I want to add some comforts to the textarea incase the user chooses to write the code in it.
   The comforts are:
     Tab should insert 4 spaces/whatever is need to make the next multiple instead of changing focus, with shift-tab decreasing the spaces to a multiple of 4
     If enter is pressed right after a ":", we should insert 4 spaces/whatever is need to make the next multiple of 4.
-  TODO: Throw some logic at the input for changing the file name, so it matches the size of the text, that way, it doesn't grow or shrink the tab\
-  TODO: Could we do our own line numbers on the second text area? Probaly shouldn't try till syntax highlighter works
+  TODO: Throw some logic at the input for changing the file name, so it matches the size of the text, that way, it doesn't grow or shrink the tab
   */
  
   return (
@@ -86,7 +88,7 @@ export default function CreateOrEditSnippet(props: {
         onKeyDown={(e) => {if (e.key == "Escape") {
           setEditfileName(false)
         }
-        else if (e.key == "Enter") {e.preventDefault(); setEditfileName(false)}}}
+        else if (e.key == "Enter" || e.key == "NumpadEnter") {e.preventDefault(); setEditfileName(false)}}}
         >
         </input> :
         <span className={"tablinks" + (currentTab == ind ? " text-red-700" : " ")}
@@ -99,8 +101,8 @@ export default function CreateOrEditSnippet(props: {
         <span key="newTab" className="tablinks" onClick={() => createNewFile()}>__++</span>
     </div>
     <div>
-      <textarea rows={10} cols={3} inert className="resize-none absolute bg-black text-white overflow-hidden text-right pr-1" defaultValue={Array(100).keys().map(n => n + 1 + "\n").toArray().join("") + ""}></textarea>
-      <textarea rows={10} cols={50} className="codePlace pl-7" value={files[currentTab].code} onInput={(e) => updateCode(e.currentTarget.value, currentTab)} onChange={(e) => typedCode(e)}></textarea>
+      <textarea id="lineNumbers" rows={10} cols={1} ref={lineNumber} readOnly inert className="resize-none absolute bg-black text-white text-right pr-1" value={Array(files[currentTab].code.split("\n").length).keys().map(n => n + 1 + "\n").toArray().join("") + ""}></textarea>
+      <textarea rows={10} cols={50} className="codePlace pl-8" value={files[currentTab].code} onInput={(e) => updateCode(e.currentTarget.value, currentTab)} onChange={(e) => typedCode(e)} onScroll={(e) => autoScroll(e.currentTarget.scrollTop)}></textarea>
     {/* <SyntaxHighligher language="renpy" style={dracula}>{files[currentTab].code}</SyntaxHighligher> */}
     {/*TODO: We are gonna ignore the syntax highlighting for now as it's not as seemless as I wanted it to be. Lets get the app working so visual can come later */}
     </div>
