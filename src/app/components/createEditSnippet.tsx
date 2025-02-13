@@ -75,7 +75,7 @@ export default function CreateOrEditSnippet(props: {
   */
  
   return (
-    <form action={formActionWithFiles} className="text-cyan-500 m-2">
+    <form action={formActionWithFiles} className="text-cyan-500">
     <input type="hidden" name="id" id="id" value={props.entry?.id}></input>
     <h1>{props.editing ? "Create new snippet" : "Editing Snippet" }</h1>
     <br/>

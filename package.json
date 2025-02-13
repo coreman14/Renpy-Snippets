@@ -6,16 +6,19 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@libsql/client": "^0.14.0",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.39.2",
     "next": "15.1.6",
+    "patch-package": "^8.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-syntax-highlighter": "^15.6.1"
+    "react-syntax-highlighter": "^15.6.1",
+    "time-delta": "^1.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

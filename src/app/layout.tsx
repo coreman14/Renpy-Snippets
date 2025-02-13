@@ -42,7 +42,10 @@ export default function RootLayout({
         </div>
         </div>
         </div>
+        <div className="m-2">
         {children}
+
+        </div>
       </body>
     </html>
   );

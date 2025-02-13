@@ -4,15 +4,6 @@ import { drizzle } from 'drizzle-orm/libsql';
 import { int, sqliteTable, text,  } from 'drizzle-orm/sqlite-core';
 export const db = drizzle(process.env.DB_FILE_NAME!);
 
-export interface renpyTableCreateForm {
-    title : string,
-    author : string | undefined,
-    catagory : string | undefined,
-    tags : string | undefined,
-    description : string | undefined,
-    // cookieId : "281d5ef6-b2da-4a10-90fb-971eb4e35d32", //Tracks who made the file without being logged in
-    //We ignore this for now
-}
 export const renpyTable = sqliteTable("renpy_snippet", {
     id: int().primaryKey({autoIncrement: true}),
     title: text().notNull(),
