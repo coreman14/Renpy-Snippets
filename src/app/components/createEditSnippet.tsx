@@ -1,7 +1,7 @@
 "use client";
 // import SyntaxHighligher from "react-syntax-highlighter"
 // import { agate as dracula } from 'react-syntax-highlighter/dist/esm/styles/hljs'
-import { useRef, useState } from "react";
+import { KeyboardEvent, useRef, useState } from "react";
 import { renpyFileDefaultNewFile, renpyfilesTable, renpyTable } from "@/db/schema";
 import { useFormStatus } from "react-dom";
 
@@ -14,6 +14,7 @@ export default function CreateOrEditSnippet(props: {
     //TODO: For addtional tags, we should add a ? button that when you hover will tell you all the things, "Addtional index for search", "You can enter multiple tags by seperating them with commas"
     const [files, setFiles] = useState(props.entry_files);
     const [currentTab, setCurrentTab] = useState(0);
+    const [indentSize, setIndentSize] = useState(4);
     const [editfileName, setEditfileName] = useState(false);
 
     const lineNumber = useRef<HTMLTextAreaElement>(null);
@@ -61,6 +62,71 @@ export default function CreateOrEditSnippet(props: {
     };
     const autoScroll = function (scrollToMatch: number) {
         lineNumber.current!.scrollTo(0, scrollToMatch);
+    };
+    const vscodeFeatures = function (e: KeyboardEvent<HTMLTextAreaElement>) {
+        const ele = e.currentTarget;
+        if (e.key.includes("Enter")) {
+            //deal with enter
+            const text = ele.value.split("\n");
+            const position = ele.selectionStart;
+            //Get the current line
+            const row = ele.value.substring(0, position).split("\n").length - 1;
+            //Get position in current line
+            const newPosition = position - ele.value.substring(0, position).lastIndexOf("\n") - 2;
+            //Calculate indent
+            const indent = text[row].length - text[row].trimStart().length;
+            let indentToAdd;
+            if (text[row].charAt(newPosition) == ":") {
+                indentToAdd = indentSize;
+                const newrow = text[row].split(":", 2);
+                newrow[0] += ":\n";
+                newrow[1] = " ".repeat(indent + indentToAdd) + newrow[1];
+                text[row] = newrow.join("");
+            } else {
+                indentToAdd = 0;
+                const newrow = [text[row].substring(0, newPosition + 1), text[row].substring(newPosition + 1)];
+                newrow[0] += "\n";
+                newrow[1] = " ".repeat(indent) + newrow[1];
+                text[row] = newrow.join("");
+            }
+            ele.value = text.join("\n");
+            ele.setSelectionRange(position + indent + indentToAdd + 1, position + indent + indentToAdd + 1);
+        } else {
+            //Tab might be a tad simpler
+            /*
+            Tab always adds `indentToAdd` spaces.
+            Shift tab always removes `indentToAdd` spaces from the start of the line
+            */
+            if (e.shiftKey) {
+                const text = ele.value.split("\n");
+                const position = ele.selectionStart;
+                //Get the current line
+                const row = ele.value.substring(0, position).split("\n").length - 1;
+                //Calculate indent
+                let indent = Math.max(text[row].length - text[row].trimStart().length, 0);
+                const old_indent = indent;
+                while (indent % indentSize != 0) {
+                    //Start indent from a multiple of identsize
+                    indent += 1;
+                }
+                indent = Math.max(indent - indentSize, 0);
+                text[row] = text[row].replace(/^ +/, " ".repeat(indent));
+                ele.value = text.join("\n");
+                ele.setSelectionRange(position - (old_indent - indent), position - (old_indent - indent), "none");
+            } else {
+                const text = ele.value.split("\n");
+                const position = ele.selectionStart;
+                //Get the current line
+                const row = ele.value.substring(0, position).split("\n").length - 1;
+                const newPosition = position - ele.value.substring(0, position).lastIndexOf("\n") - 2;
+                const newrow = [text[row].substring(0, newPosition + 1), text[row].substring(newPosition + 1)];
+                newrow[1] = " ".repeat(indentSize) + newrow[1];
+                text[row] = newrow.join("");
+                ele.value = text.join("\n");
+                ele.setSelectionRange(position + indentSize, position + indentSize, "none");
+            }
+        }
+        updateCode(ele.value, currentTab);
     };
     /*
   TODO: I want to add some comforts to the textarea incase the user chooses to write the code in it.
@@ -129,7 +195,8 @@ export default function CreateOrEditSnippet(props: {
                     inert
                     className="resize-none absolute bg-black text-white text-right pr-1"
                     value={
-                        Array(files[currentTab].code.split("\n").length).fill(0)
+                        Array(files[currentTab].code.split("\n").length)
+                            .fill(0)
                             .map((_, n) => n + 1 + "\n")
                             .join("") + ""
                     }
@@ -139,14 +206,41 @@ export default function CreateOrEditSnippet(props: {
                     cols={50}
                     className="codePlace pl-8"
                     value={files[currentTab].code}
-                    onInput={(e) => {updateCode(e.currentTarget.value, currentTab)}}
+                    onInput={(e) => {
+                        updateCode(e.currentTarget.value, currentTab);
+                    }}
                     onScroll={(e) => autoScroll(e.currentTarget.scrollTop)}
-                    onKeyDown={(e) => {if (e.key == "Tab"){e.preventDefault();} else if (e.key == "Escape"){e.currentTarget.blur()}}}
+                    onKeyDown={(e) => {
+                        if (
+                            (e.key == "Tab" || e.key == "Enter" || e.key == "NumpadEnter") &&
+                            e.currentTarget.selectionStart == e.currentTarget.selectionEnd //Don't do this if text is selected
+                        ) {
+                            e.preventDefault();
+                            vscodeFeatures(e);
+                        } else if (e.key == "Escape") {
+                            e.currentTarget.blur();
+                        }
+                    }}
                     //TODO: We add the key handler here for doing indenting on tab and enter and making sure esc blurs the element
                 ></textarea>
                 {/* <SyntaxHighligher language="renpy" style={dracula}>{files[currentTab].code}</SyntaxHighligher> */}
                 {/*TODO: We are gonna ignore the syntax highlighting for now as it's not as seemless as I wanted it to be. Lets get the app working so visual can come later */}
             </div>
+            <label htmlFor="indentSize">Size of indent: </label>
+            <input
+                type="number"
+                value={indentSize}
+                onInput={(e) => {
+                    if (e.currentTarget.value){
+                        setIndentSize(Math.max(parseInt(e.currentTarget.value || ""), 1));
+                    }
+                    else{
+                        setIndentSize(1)
+                    }
+                }}
+            ></input>
+            <br />
+            <br />
             <label htmlFor="title">Title: </label>
             <input type="text" name="title" id="title" required defaultValue={props.entry?.title}></input>
             <br />
