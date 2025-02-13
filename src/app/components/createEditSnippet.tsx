@@ -102,7 +102,7 @@ export default function CreateOrEditSnippet(props: {
         <span key="newTab" className="tablinks" onClick={() => createNewFile()}>__++</span>
     </div>
     <div>
-      <textarea id="lineNumbers" rows={10} cols={1} ref={lineNumber} readOnly inert className="resize-none absolute bg-black text-white text-right pr-1" value={Array(files[currentTab].code.split("\n").length).keys().map(n => n + 1 + "\n").toArray().join("") + ""}></textarea>
+      <textarea id="lineNumbers" rows={10} cols={1} ref={lineNumber} readOnly inert className="resize-none absolute bg-black text-white text-right pr-1" value={Array(files[currentTab].code.split("\n").length).map(n => n + 1 + "\n").join("") + ""}></textarea>
       <textarea rows={10} cols={50} className="codePlace pl-8" value={files[currentTab].code} onInput={(e) => updateCode(e.currentTarget.value, currentTab)} onChange={(e) => typedCode(e)} onScroll={(e) => autoScroll(e.currentTarget.scrollTop)}></textarea>
     {/* <SyntaxHighligher language="renpy" style={dracula}>{files[currentTab].code}</SyntaxHighligher> */}
     {/*TODO: We are gonna ignore the syntax highlighting for now as it's not as seemless as I wanted it to be. Lets get the app working so visual can come later */}
