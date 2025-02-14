@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import SearchBar from "./components/searchInput";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,7 +38,7 @@ export default function RootLayout({
             <Link className="whitespace-nowrap" href="/entry/new">Create Snippet</Link>
           </div>
           <div className="w-1/2" dir="rtl">
-            <span className="whitespace-nowrap">Search Bar</span>
+            <SearchBar></SearchBar>
             <span className="whitespace-nowrap">Admin Button</span>
         </div>
         </div>
