@@ -8,6 +8,7 @@ import { renpyTable } from "@/db/schema";
 import * as timeDelta from 'time-delta';
 // @ts-expect-error Locales are not marked as exported correctly, but we can still access all of them
 import enLocale from 'time-delta/locales/en';
+import { useSearchParams } from "next/navigation";
 
 timeDelta.addLocale(enLocale);
 const instance = timeDelta.create({
@@ -76,6 +77,7 @@ export default function BrowsePage(props : {
     */
     const [userEntries, setUserEntries] = useState(false);
     const [sortBy, setSortBy] = useState(0);
+    const searchParams = useSearchParams()
     // 0 => Edit new to old, 1 Edit old to new, 2 Created new to old, 3 Created old to new, 4 title a-z, 5 title z-a, 6 catagory a-z, 7 catagory z-a
     const sortedArray = props.pageEntries.toSorted(getSortFunction(sortBy))
     return <>
@@ -99,6 +101,7 @@ export default function BrowsePage(props : {
         <><form action={deleteSnippet} className="text-cyan-500" ><Link href={"/entry/edit/" + x.id}>Edit</Link>
                     <button type="submit" className="pl-2">Delete</button>
                     <input type="hidden" value={x.id} name="id" id="id"></input>
+                    <input type="hidden" value={searchParams.get("searchTerm") || ""} name="searchFilter" id="searchFilter"></input>
                 </form></> : ""}<br/></div>)
     }
     </>

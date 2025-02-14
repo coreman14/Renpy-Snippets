@@ -63,8 +63,9 @@ export async function editSnippet(files: DB_renpyFileTable[], formData: FormData
 }
 
 export async function deleteSnippet(formData: FormData){
+  const searchTerm = formData.get("searchFilter");
   const id = Number.parseInt(formData.get("id")?.toString() || "-1")
   await db.delete(renpyfilesTable).where(eq(renpyfilesTable.snippet_id, id))
   await db.delete(renpyTable).where(eq(renpyTable.id, id))
-  redirect("/browse")
+  redirect("/browse" + (searchTerm ? "?searchTerm=" + searchTerm : "" ))
 }
