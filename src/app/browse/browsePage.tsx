@@ -9,6 +9,7 @@ import * as timeDelta from 'time-delta';
 // @ts-expect-error Locales are not marked as exported correctly, but we can still access all of them
 import enLocale from 'time-delta/locales/en';
 import { useSearchParams } from "next/navigation";
+import { useFormStatus } from "react-dom";
 
 timeDelta.addLocale(enLocale);
 const instance = timeDelta.create({
@@ -99,10 +100,21 @@ export default function BrowsePage(props : {
             {x.description && "| " + x.description.split("\n")[0].replace(/(.{30})..+/, "$1…")}</div>
         {props.userId == x.cookie_id ?
         <><form action={deleteSnippet} className="text-cyan-500" ><Link href={"/entry/edit/" + x.id}>Edit</Link>
-                    <button type="submit" className="pl-2">Delete</button>
+                    <DeleteButton/>
                     <input type="hidden" value={x.id} name="id" id="id"></input>
                     <input type="hidden" value={searchParams.get("searchTerm") || ""} name="searchFilter" id="searchFilter"></input>
                 </form></> : ""}<br/></div>)
     }
     </>
   }
+
+
+function DeleteButton() {
+    const { pending } = useFormStatus();
+    return (
+        <button type="submit" disabled={pending} className="disabled:text-black pl-2">
+            Delete
+        </button>
+    );
+}
+  

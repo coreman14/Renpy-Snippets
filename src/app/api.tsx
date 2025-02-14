@@ -6,6 +6,13 @@ import { db, DB_renpyFileTable, renpyfilesTable, renpyTable } from "@/db/schema"
 import { eq } from "drizzle-orm";
 import { randomUUID } from 'crypto'
 
+/*
+For button testing
+  const start = new Date().getTime();
+  while ((new Date().getTime() - start) < 9000) {}
+
+*/
+
 export async function createSnippet(files: DB_renpyFileTable[], formData: FormData){
     const cookiesStore = await cookies();
     if (!cookiesStore.get("userId")){

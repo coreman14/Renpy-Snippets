@@ -10,7 +10,6 @@ export default async function BrowsePageServer({
 }) {
     const searchString = (await searchParams).searchTerm
     let data;
-    console.log(searchString)
     if (searchString){
       data = await browseSimpleSearch(typeof searchString === "string" ? searchString : searchString[0]);
     }
