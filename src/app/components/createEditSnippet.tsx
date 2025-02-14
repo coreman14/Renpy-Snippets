@@ -65,12 +65,11 @@ export default function CreateOrEditSnippet(props: {
     };
     const vscodeFeatures = function (e: KeyboardEvent<HTMLTextAreaElement>) {
         const ele = e.currentTarget;
+        const text = ele.value.split("\n");
+        const position = ele.selectionStart;
+        //Get the current line
+        const row = ele.value.substring(0, position).split("\n").length - 1;
         if (e.key.includes("Enter")) {
-            //deal with enter
-            const text = ele.value.split("\n");
-            const position = ele.selectionStart;
-            //Get the current line
-            const row = ele.value.substring(0, position).split("\n").length - 1;
             //Get position in current line
             const newPosition = position - ele.value.substring(0, position).lastIndexOf("\n") - 2;
             //Calculate indent
@@ -98,10 +97,6 @@ export default function CreateOrEditSnippet(props: {
             Shift tab always removes `indentToAdd` spaces from the start of the line
             */
             if (e.shiftKey) {
-                const text = ele.value.split("\n");
-                const position = ele.selectionStart;
-                //Get the current line
-                const row = ele.value.substring(0, position).split("\n").length - 1;
                 //Calculate indent
                 let indent = Math.max(text[row].length - text[row].trimStart().length, 0);
                 const old_indent = indent;
@@ -114,10 +109,6 @@ export default function CreateOrEditSnippet(props: {
                 ele.value = text.join("\n");
                 ele.setSelectionRange(position - (old_indent - indent), position - (old_indent - indent), "none");
             } else {
-                const text = ele.value.split("\n");
-                const position = ele.selectionStart;
-                //Get the current line
-                const row = ele.value.substring(0, position).split("\n").length - 1;
                 const newPosition = position - ele.value.substring(0, position).lastIndexOf("\n") - 2;
                 const newrow = [text[row].substring(0, newPosition + 1), text[row].substring(newPosition + 1)];
                 newrow[1] = " ".repeat(indentSize) + newrow[1];
@@ -127,6 +118,8 @@ export default function CreateOrEditSnippet(props: {
             }
         }
         updateCode(ele.value, currentTab);
+        ele.blur()
+        ele.focus()
     };
     /*
   TODO: I want to add some comforts to the textarea incase the user chooses to write the code in it.
