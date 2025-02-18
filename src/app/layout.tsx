@@ -24,12 +24,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  //TODO: Cookie check here
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+        >
         <div className="header w-full sticky top-0 overflow-hidden bg-black">
           <div className="flex flex-row">
           <div className="w-1/2 ">
@@ -39,6 +38,7 @@ export default function RootLayout({
           </div>
           <div className="w-1/2" dir="rtl">
             <SearchBar></SearchBar>
+            {/* //TODO: Admin button needs a client component that checks for cookie-id*/}
             <span className="whitespace-nowrap">Admin Button</span>
         </div>
         </div>

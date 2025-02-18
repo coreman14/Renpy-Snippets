@@ -91,11 +91,6 @@ export default function CreateOrEditSnippet(props: {
             ele.value = text.join("\n");
             ele.setSelectionRange(position + indent + indentToAdd + 1, position + indent + indentToAdd + 1);
         } else {
-            //Tab might be a tad simpler
-            /*
-            Tab always adds `indentToAdd` spaces.
-            Shift tab always removes `indentToAdd` spaces from the start of the line
-            */
             if (e.shiftKey) {
                 //Calculate indent
                 let indent = Math.max(text[row].length - text[row].trimStart().length, 0);
@@ -122,10 +117,6 @@ export default function CreateOrEditSnippet(props: {
         ele.focus()
     };
     /*
-  TODO: I want to add some comforts to the textarea incase the user chooses to write the code in it.
-  The comforts are:
-    Tab should insert 4 spaces/whatever is need to make the next multiple instead of changing focus, with shift-tab decreasing the spaces to a multiple of 4
-    If enter is pressed right after a ":", we should insert 4 spaces/whatever is need to make the next multiple of 4.
   TODO: Throw some logic at the input for changing the file name, so it matches the size of the text, that way, it doesn't grow or shrink the tab
   */
     return (
@@ -214,7 +205,6 @@ export default function CreateOrEditSnippet(props: {
                             e.currentTarget.blur();
                         }
                     }}
-                    //TODO: We add the key handler here for doing indenting on tab and enter and making sure esc blurs the element
                 ></textarea>
                 {/* <SyntaxHighligher language="renpy" style={dracula}>{files[currentTab].code}</SyntaxHighligher> */}
                 {/*TODO: We are gonna ignore the syntax highlighting for now as it's not as seemless as I wanted it to be. Lets get the app working so visual can come later */}

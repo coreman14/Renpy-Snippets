@@ -4,9 +4,10 @@
 - [X] Add some comforts to the file text area (Tab should insert up to 4 spaces to match indents + auto space when : at end of line)
 - [X] Search bar. On browse page → Filter results, Any other page → switch to browse page with results filtered. Will add second search bar under advanced search to look in more places
 - [ ] Second view for browse page that contains more info + Make the first view better (CSS starts here)
-- [ ] Home page
+- [ ] Home page -> Most recent uploads + Bigger button to create snips
 - [ ] Populate a filter tab that loads all tags/categories/authors, the works
 - [ ] Implement the syntax highlighter. You can't edit directly in a syntax highlight, so we have to do some weird CSS tricks or something.
 - [ ] Add some sort of suspense/loading state to the edit/create form and the delete button
 - [ ] Add download button that gives the project back as proper files in a zip
 - [ ] Add Discord embed. I don't know how they work, but it would be cool to have it show all pages
+- [ ] Additional pages: (Note these are pages that have duplicate functions, an author page would be the same as setting the filter to that author) Author page (By clicking on the author name you can go to a page that only has that authors snips), Category page (Same thing as the author)

@@ -13,7 +13,7 @@ import { useFormStatus } from "react-dom";
 
 timeDelta.addLocale(enLocale);
 const instance = timeDelta.create({
-    locale: 'en', // default
+    locale: 'en',
     span: 1,
     unitType: "long"
   });
@@ -72,10 +72,6 @@ export default function BrowsePage(props : {
     pageEntries:  (typeof renpyTable.$inferSelect)[];
     dateOfCall:  number;
 }) {
-    //TODO: Add way to sort search, by date at this point, I don't think we need anything else
-    /*
-    CDate, MDate, Author, Title, Catagory
-    */
     const [userEntries, setUserEntries] = useState(false);
     const [sortBy, setSortBy] = useState(0);
     const searchParams = useSearchParams()

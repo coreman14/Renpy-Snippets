@@ -34,12 +34,6 @@ export async function createSnippet(files: DB_renpyFileTable[], formData: FormDa
 }
 
 export async function editSnippet(files: DB_renpyFileTable[], formData: FormData){
-  //1. We need the ID to do a edit on. Hidden value
-  //Info data part is easy, grab values from fourm then update with the correct ID
-  //2. 3 types of files. Premade that we edit, new files, premade that we remove.
-  //This is a bit harder. We can do this by id/snippet_id. If id != -1, its an edited premade so update
-  //If the id is -1, then its a new file, so insert
-  //If the id is not -1, but the snippet id is, we delete the file
   const new_entry = {
     title : formData.get("title")?.toString() || "",
     author : formData.get("author")?.toString(),
