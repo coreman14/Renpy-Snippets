@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Outfit } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
 import SearchBar from "./components/searchInput";
+import LayoutLink from "./components/LayoutLink";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+const outfit = Outfit({weight: "400"});
 
 export const metadata: Metadata = {
   title: "Renpy Snippets",
@@ -24,17 +25,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-        <div className="header w-full sticky top-0 overflow-hidden bg-black">
+        <div className={"header w-full sticky top-0 overflow-hidden p-2 text-base " + outfit.className}  style={{background: "#FFA48C"}}>
           <div className="flex flex-row">
           <div className="w-1/2 ">
-            <Link className="whitespace-nowrap" href="/">Home Logo</Link>
-            <Link className="whitespace-nowrap" href="/browse">Browse</Link>
-            <Link className="whitespace-nowrap" href="/entry/new">Create Snippet</Link>
+            <LayoutLink href="/" text="Most Recent"></LayoutLink>
+            <LayoutLink href="/browse" text="Browse"></LayoutLink>
+            <LayoutLink href="/entry/new" text="Create"></LayoutLink>
           </div>
           <div className="w-1/2" dir="rtl">
             <SearchBar></SearchBar>
