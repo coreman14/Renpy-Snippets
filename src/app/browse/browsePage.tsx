@@ -82,7 +82,7 @@ export default function BrowsePage(props: {
             <h1 className="text-2xl text-[var(--layout-bar-selected)] pb-4 pt-2">Browse All</h1>
             <div className="grid-rows-3 grid w-1/4 gap-2">
                 <div className="checkbox-wrapper-14 grid-cols-2 grid">
-                    <label htmlFor="showUsersSnippets">Hide other user snippets:</label>
+                    <label htmlFor="showUsersSnippets">Show my snippets:</label>
                     <input
                         id="showUsersSnippets"
                         type="checkbox"
