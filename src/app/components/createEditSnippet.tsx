@@ -120,7 +120,7 @@ export default function CreateOrEditSnippet(props: {
   TODO: Throw some logic at the input for changing the file name, so it matches the size of the text, that way, it doesn't grow or shrink the tab
   */
     return (
-        <form action={formActionWithFiles} className="text-cyan-500">
+        <form action={formActionWithFiles} id="createViewForm">
             <input type="hidden" name="id" id="id" value={props.entry?.id}></input>
             <h1>{props.editing ? "Create new snippet" : "Editing Snippet"}</h1>
             <br />
@@ -134,7 +134,7 @@ export default function CreateOrEditSnippet(props: {
                             {editfileName && ind == currentTab ? (
                                 <input
                                     autoFocus
-                                    className="tablinks text-red-700"
+                                    className="tablinks"
                                     value={x.filename}
                                     onInput={(e) => editFileName(e.currentTarget.value, ind)}
                                     onBlur={() => setEditfileName(false)}
@@ -149,7 +149,7 @@ export default function CreateOrEditSnippet(props: {
                                 ></input>
                             ) : (
                                 <span
-                                    className={"tablinks" + (currentTab == ind ? " text-red-700" : " ")}
+                                    className={"tablinks" + (currentTab == ind ? "" : " ")}
                                     onClick={() => {
                                         setCurrentTab(ind);
                                         setEditfileName(false);

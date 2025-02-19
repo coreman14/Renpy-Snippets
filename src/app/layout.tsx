@@ -14,7 +14,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 const outfit = Outfit({weight: "400"});
-
 export const metadata: Metadata = {
   title: "Renpy Snippets",
   description: "App to create and share renpy snippets",
@@ -31,17 +30,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-        <div className={"header w-full sticky top-0 overflow-hidden p-2 text-base " + outfit.className}  style={{background: "#FFA48C"}}>
+        <div className={"header w-full sticky top-0 overflow-hidden p-2 bg-[var(--layout-bar-back)] text-base " + outfit.className}>
           <div className="flex flex-row">
           <div className="w-1/2 ">
-            <LayoutLink href="/" text="Most Recent"></LayoutLink>
-            <LayoutLink href="/browse" text="Browse"></LayoutLink>
+            <LayoutLink href="/" text="Recent Submissions"></LayoutLink>
+            <LayoutLink href="/browse" text="Browse All"></LayoutLink>
             <LayoutLink href="/entry/new" text="Create"></LayoutLink>
           </div>
           <div className="w-1/2" dir="rtl">
             <SearchBar></SearchBar>
-            {/* //TODO: Admin button needs a client component that checks for cookie-id*/}
-            <span className="whitespace-nowrap">Admin Button</span>
         </div>
         </div>
         </div>

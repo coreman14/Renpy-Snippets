@@ -2,12 +2,20 @@
 - [I] Better API validation. Ignoring due to the hole I dug myself in with a single component for 2 form actions + how do you bind it after?
 - [X] Button that makes the current user only able to see their snippets in the browse page
 - [X] Add some comforts to the file text area (Tab should insert up to 4 spaces to match indents + auto space when : at end of line)
-- [X] Search bar. On browse page → Filter results, Any other page → switch to browse page with results filtered. Will add second search bar under advanced search to look in more places
-- [ ] Second view for browse page that contains more info + Make the first view better (CSS starts here)
-- [ ] Home page -> Most recent uploads + Bigger button to create snips
-- [ ] Populate a filter tab that loads all tags/categories/authors, the works
-- [ ] Implement the syntax highlighter. You can't edit directly in a syntax highlight, so we have to do some weird CSS tricks or something.
-- [ ] Add some sort of suspense/loading state to the edit/create form and the delete button
+- [X] Search bar.
+- [X] Home page.
+- [ ] Finish CSS on pages. Create/edit, view and top bar of browse page and make layout search nicer
+- [ ] Add code search. Search bar on browse that specifically searches code files (name and code)
+- [ ] Add grid view for Recent and Browse
+- [ ] Add import button. It takes a zip folder and adds every RPY it could find to the project.
+- [ ] Take a shot at syntax highlighting but ditch if too hard
 - [ ] Add download button that gives the project back as proper files in a zip
+- [ ] Fix Readme
+
+## Future possible upgrades
+- [ ] Populate a filter tab that loads all tags/categories/authors, the works
+- [ ] Syntax highlighting if not done
+- [ ] Add some sort of suspense/loading state to the edit/create form and the delete button
+- [ ] If user gives an author name, save it in local storage and autofill the create page
 - [ ] Add Discord embed. I don't know how they work, but it would be cool to have it show all pages
 - [ ] Additional pages: (Note these are pages that have duplicate functions, an author page would be the same as setting the filter to that author) Author page (By clicking on the author name you can go to a page that only has that authors snips), Category page (Same thing as the author)
