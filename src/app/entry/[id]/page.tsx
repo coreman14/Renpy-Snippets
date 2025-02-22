@@ -1,6 +1,6 @@
 import { renpyTable, db, renpyfilesTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import BrowseView from "./browse_view_normal";
+import BrowseView from "./show_entry";
 export default async function ViewEntry(props: {
   params: Promise<{ id: number }>;
 }) {

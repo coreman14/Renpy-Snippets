@@ -80,7 +80,7 @@ export default function BrowsePage(props: {
     return (
         <>
             <h1 className="text-2xl text-[var(--layout-bar-selected)] pb-4 pt-2">Browse All</h1>
-            <div className="grid-rows-3 grid w-1/4 gap-2">
+            <div className="grid-rows-3 grid w-80 gap-2 min-h-fit">
                 <div className="checkbox-wrapper-14 grid-cols-2 grid">
                     <label htmlFor="showUsersSnippets">Show my snippets:</label>
                     <input
@@ -91,7 +91,6 @@ export default function BrowsePage(props: {
                         onChange={() => setUserEntries((a) => !a)}
                     />
                 </div>
-
                 <div className="grid-cols-2 grid">
                     <label htmlFor="sortResults">Sort results by: </label>
                     <select

@@ -18,6 +18,10 @@ export async function createSnippet(files: DB_renpyFileTable[], formData: FormDa
     if (!cookiesStore.get("userId")){
       cookiesStore.set("userId", randomUUID().toString(), {maxAge: 999999999999999})
     }
+    else {
+      const value = cookiesStore.get("userId")?.value || randomUUID().toString();
+      cookiesStore.set("userId", value, {maxAge: 999999999999999})
+    }
     const new_entry = {
       title : formData.get("title")?.toString() || "",
       author : formData.get("author")?.toString(),
@@ -34,6 +38,14 @@ export async function createSnippet(files: DB_renpyFileTable[], formData: FormDa
 }
 
 export async function editSnippet(files: DB_renpyFileTable[], formData: FormData){
+  const cookiesStore = await cookies();
+  if (!cookiesStore.get("userId")){
+    cookiesStore.set("userId", randomUUID().toString(), {maxAge: 999999999999999})
+  }
+  else {
+    const value = cookiesStore.get("userId")?.value || randomUUID().toString();
+    cookiesStore.set("userId", value, {maxAge: 999999999999999})
+  }
   const new_entry = {
     title : formData.get("title")?.toString() || "",
     author : formData.get("author")?.toString(),
@@ -64,6 +76,14 @@ export async function editSnippet(files: DB_renpyFileTable[], formData: FormData
 }
 
 export async function deleteSnippet(formData: FormData){
+  const cookiesStore = await cookies();
+  if (!cookiesStore.get("userId")){
+    cookiesStore.set("userId", randomUUID().toString(), {maxAge: 999999999999999})
+  }
+  else {
+    const value = cookiesStore.get("userId")?.value || randomUUID().toString();
+    cookiesStore.set("userId", value, {maxAge: 999999999999999})
+  }
   const searchTerm = formData.get("searchFilter");
   const id = Number.parseInt(formData.get("id")?.toString() || "-1")
   await db.delete(renpyfilesTable).where(eq(renpyfilesTable.snippet_id, id))
