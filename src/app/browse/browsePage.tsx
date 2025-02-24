@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { renpyTable } from "@/db/schema";
+import { browseAdvancedSearchResult, browseAdvancedSearchSingle } from "@/db/schema";
 
 import ListOfSnippets from "../components/ListOfSnippets";
 import { Nunito_Sans } from "next/font/google";
@@ -37,35 +37,35 @@ function getSortFunction(functionToGet: number) {
     // 0 => Edit new to old, 1 Edit old to new, 2 Created new to old, 3 Created old to new, 4 title a-z, 5 title z-a, 6 catagory a-z, 7 catagory z-a
     switch (functionToGet) {
         case 0:
-            return (a: typeof renpyTable.$inferSelect, b: typeof renpyTable.$inferSelect) =>
-                a.mdate > b.mdate ? -1 : 1;
+            return (a:  browseAdvancedSearchSingle, b:  browseAdvancedSearchSingle) =>
+                a.snippet.mdate > b.snippet.mdate ? -1 : 1;
         case 1:
-            return (a: typeof renpyTable.$inferSelect, b: typeof renpyTable.$inferSelect) =>
-                a.mdate < b.mdate ? -1 : 1;
+            return (a:  browseAdvancedSearchSingle, b:  browseAdvancedSearchSingle) =>
+                a.snippet.mdate < b.snippet.mdate ? -1 : 1;
         case 2:
-            return (a: typeof renpyTable.$inferSelect, b: typeof renpyTable.$inferSelect) =>
-                a.cdate > b.cdate ? -1 : 1;
+            return (a:  browseAdvancedSearchSingle, b:  browseAdvancedSearchSingle) =>
+                a.snippet.cdate > b.snippet.cdate ? -1 : 1;
         case 3:
-            return (a: typeof renpyTable.$inferSelect, b: typeof renpyTable.$inferSelect) =>
-                a.cdate < b.cdate ? -1 : 1;
+            return (a:  browseAdvancedSearchSingle, b:  browseAdvancedSearchSingle) =>
+                a.snippet.cdate < b.snippet.cdate ? -1 : 1;
         case 4:
-            return (a: typeof renpyTable.$inferSelect, b: typeof renpyTable.$inferSelect) =>
-                a.title > b.title ? 1 : -1;
+            return (a:  browseAdvancedSearchSingle, b:  browseAdvancedSearchSingle) =>
+                a.snippet.title > b.snippet.title ? 1 : -1;
         case 5:
-            return (a: typeof renpyTable.$inferSelect, b: typeof renpyTable.$inferSelect) =>
-                a.title < b.title ? 1 : -1;
+            return (a:  browseAdvancedSearchSingle, b:  browseAdvancedSearchSingle) =>
+                a.snippet.title < b.snippet.title ? 1 : -1;
         case 6:
-            return (a: typeof renpyTable.$inferSelect, b: typeof renpyTable.$inferSelect) =>
-                (a.catagory || "") > (b.catagory || "") ? 1 : -1;
+            return (a:  browseAdvancedSearchSingle, b:  browseAdvancedSearchSingle) =>
+                (a.snippet.catagory || "") > (b.snippet.catagory || "") ? 1 : -1;
         case 7:
-            return (a: typeof renpyTable.$inferSelect, b: typeof renpyTable.$inferSelect) =>
-                (a.catagory || "") < (b.catagory || "") ? 1 : -1;
+            return (a:  browseAdvancedSearchSingle, b:  browseAdvancedSearchSingle) =>
+                (a.snippet.catagory || "") < (b.snippet.catagory || "") ? 1 : -1;
     }
 }
 
 export default function BrowsePage(props: {
     userId: string | undefined;
-    pageEntries: typeof renpyTable.$inferSelect[];
+    pageEntries: browseAdvancedSearchResult;
 }) {
     const [userEntries, setUserEntries] = useState(false);
     const [sortBy, setSortBy] = useState(0);
@@ -73,10 +73,10 @@ export default function BrowsePage(props: {
     const [codeSearch, setCodeSearch] = useState("");
     const divRef = useRef<HTMLSelectElement>(null);
     const dimensions = useRefDimensions(divRef);
-    const sortedArray = props.pageEntries.toSorted(getSortFunction(sortBy));
-    // if (codeSearch){
-    //     sortedArray = sortedArray.filter((x) => x)
-    // }
+    let sortedArray = Object.values(props.pageEntries).toSorted(getSortFunction(sortBy));
+    if (codeSearch){
+        sortedArray = sortedArray.filter((x) => x.files.some((y) => y.filename.includes(codeSearch) || y.code.includes(codeSearch)))
+    }
     return (
         <>
             <h1 className="text-2xl text-[var(--layout-bar-selected)] pb-4 pt-2">Browse All</h1>

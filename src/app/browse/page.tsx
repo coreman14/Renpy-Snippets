@@ -1,4 +1,4 @@
-import { browseSimpleSearch } from "@/db/schema";
+import { browseAdvancedSearch } from "@/db/schema";
 import { cookies } from 'next/headers'
 import BrowsePage from "./browsePage";
 
@@ -11,7 +11,8 @@ export default async function BrowsePageServer({
     if (!searchString){
       searchString = ""
     }
-    const data = await browseSimpleSearch(typeof searchString === "string" ? searchString : searchString[0]);
+    // const data = await browseSimpleSearch(typeof searchString === "string" ? searchString : searchString[0]);
+    const data = await browseAdvancedSearch(typeof searchString === "string" ? searchString : searchString[0]);
 
 
     const userId = (await cookies()).get("userId")?.value;

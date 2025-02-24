@@ -1,5 +1,5 @@
 'use client'
-import { renpyTable } from "@/db/schema";
+import { browseAdvancedSearchSingle } from "@/db/schema";
 import Link from "next/link";
 import { deleteSnippet } from "../api";
 import { useSearchParams } from "next/navigation";
@@ -8,36 +8,36 @@ import { useState } from "react";
 import { getTimeString } from "./snippetDisplayFunction";
 
 export default function ListOfSnippets(props: {
-    itemsToDisplay: typeof renpyTable.$inferSelect[];
+    itemsToDisplay: browseAdvancedSearchSingle[];
     showOnlyUserEntries?: boolean;
     userId?: string | undefined;
     showEditedTime?: boolean;
 }){
     const [dateOfCall] = useState(new Date().getTime());
     const searchParams = useSearchParams();
-    return props.itemsToDisplay.filter((x) => !props.showOnlyUserEntries || props.userId == x.cookie_id)
+    return props.itemsToDisplay.filter((x) => !props.showOnlyUserEntries || props.userId == x.snippet.cookie_id)
         .map((x) => (
-            <div key={x.id}>
+            <div key={x.snippet.id}>
                 <div className="text-xl text-[var(--forground-buttons)]">
-                    <Link title="View Snippet" href={"/entry/" + x.id}>
-                        {x.title}
+                    <Link title="View Snippet" href={"/entry/" + x.snippet.id}>
+                        {x.snippet.title}
                     </Link>
                 </div>
 
                 <div className="additionalDetails text-gray-700">
-                    {x.author ? "Author: " + x.author : "Author: Anonymous"}
-                    {" "}| Catagory: {x.catagory || "None"} |{" " + (x.cdate == x.mdate || !props.showEditedTime ? "Posted" : "Edited")}{" "}
-                    {getTimeString(dateOfCall, !props.showEditedTime ? x.cdate :  x.mdate )} Ago
-                    {x.description && " | " + x.description.split("\n")[0].replace(/(.{30})..+/, "$1…")}
+                    {x.snippet.author ? "Author: " + x.snippet.author : "Author: Anonymous"}
+                    {" "}| Catagory: {x.snippet.catagory || "None"} |{" " + (x.snippet.cdate == x.snippet.mdate || !props.showEditedTime ? "Posted" : "Edited")}{" "}
+                    {getTimeString(dateOfCall, !props.showEditedTime ? x.snippet.cdate :  x.snippet.mdate )} Ago
+                    {x.snippet.description && " | " + x.snippet.description.split("\n")[0].replace(/(.{30})..+/, "$1…")}
                 </div>
-                {props.userId == x.cookie_id ? (
+                {props.userId == x.snippet.cookie_id ? (
                     <>
                         <form action={deleteSnippet} className="text-sm text-[var(--forground-buttons2)]">
-                            <Link href={"/entry/edit/" + x.id} title="Edit snippet">
+                            <Link href={"/entry/edit/" + x.snippet.id} title="Edit snippet">
                                 Edit
                             </Link>
                             <DeleteButton />
-                            <input type="hidden" value={x.id} name="id" id="id"></input>
+                            <input type="hidden" value={x.snippet.id} name="id" id="id"></input>
                             <input
                                 type="hidden"
                                 value={searchParams.get("searchTerm") || ""}
