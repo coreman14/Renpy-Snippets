@@ -208,7 +208,8 @@ def main():
                 print(f"Skipping duplicate entry: {yaml_data.get('title', '')}")
                 continue
 
-            current_time = int(datetime.now().timestamp() * 1000)
+            current_time = int(datetime.now().timestamp() * 1000) - random.randint(1000, 500000)
+            mtime = current_time + random.randint(1000, 150000)
             title = yaml_data.get("title", "")
             print(f"Adding entry #{entries_added + 1}: {title}")
 
@@ -224,7 +225,7 @@ def main():
                     "Test Data",
                     ",".join(yaml_data.get("tags", [])),
                     current_time,
-                    current_time,
+                    mtime,
                 ),
             )
 
@@ -237,7 +238,7 @@ def main():
                     INSERT INTO renpy_snippet_files (snippet_id, filename, code, cdate, mdate)
                     VALUES (?, ?, ?, ?, ?)
                 """,
-                    (snippet_id, content["filename"], content["code"], current_time, current_time),
+                    (snippet_id, content["filename"], content["code"], current_time, mtime),
                 )
 
             entries_added += 1
