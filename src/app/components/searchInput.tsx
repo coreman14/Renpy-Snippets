@@ -4,8 +4,8 @@ import { useState } from "react";
 import { redirect, useSearchParams } from "next/navigation";
 
 export default function SearchBar() {
-    const [search, setSearch] = useState("");
     const searchParams = useSearchParams()
+    const [search, setSearch] = useState(searchParams.get("searchTerm") || "");
 
     return (
         <input

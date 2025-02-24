@@ -131,7 +131,7 @@ function EditCodePlace(props: {
     };
     return (
         <>
-            <div className="tab mb-2 text-2xl">
+            <div className="tab mb-2 text-2xl max-w-full overflow-x-auto overflow-y-hidden">
                 {files.map((x, ind) =>
                     x.cdate == -1 ? (
                         ""
@@ -220,10 +220,10 @@ function EditCodePlace(props: {
                 <div className="flex flex-1 justify-end">
                     <div></div>
                     <div className="text-2xl">
-                    <label htmlFor="indentSize">Indent Size</label>
+                        <label htmlFor="indentSize">Indent Size</label>
                         <input
-                        id="indentSize"
-                        className="ml-2 w-12 outline-none border-2 border-[var(--background)] focus:border-red-500 rounded-md pl-1 stanInput"
+                            id="indentSize"
+                            className="ml-2 w-12 outline-none border-2 border-[var(--background)] focus:border-red-500 rounded-md pl-1 stanInput"
                             type="number"
                             value={indentSize}
                             onInput={(e) => {
@@ -234,7 +234,6 @@ function EditCodePlace(props: {
                                 }
                             }}
                         ></input>
-
                     </div>
                 </div>
             </div>
@@ -245,10 +244,11 @@ function EditCodePlace(props: {
 function ViewCodePlace(props: { files: (typeof renpyfilesTable.$inferSelect)[] }) {
     const [currentTab, setCurrentTab] = useState(0);
     const darkModeTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const maxWidth = "98vw";
     const codeTabs = props.files.map((x, ind) => (
         <SyntaxHighlighter
             key={ind}
-            customStyle={{ maxWidth: "98vw", maxHeight: "60vh" }}
+            customStyle={{ maxWidth: maxWidth, maxHeight: "60vh" }}
             language="renpy"
             style={darkModeTheme ? darkTheme : lightTheme}
             showLineNumbers={true}
@@ -258,7 +258,11 @@ function ViewCodePlace(props: { files: (typeof renpyfilesTable.$inferSelect)[] }
     ));
     return (
         <>
-            <div className="tab mb-1">
+            <div
+                className="tab mb-1 overflow-x-auto overflow-y-hidden pt-1 pb-1"
+                style={{ scrollbarWidth: "none", maxWidth: maxWidth}}
+                onWheel={(e) => { if (e.deltaY) { e.currentTarget.scrollLeft += e.deltaY}}}
+            >
                 {props.files.map((x, ind) =>
                     x.cdate == -1 ? (
                         ""
