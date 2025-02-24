@@ -142,6 +142,7 @@ def main():
 
     parser.add_argument("-l", "--limit", type=int, help="Maximum number of entries to add")
     parser.add_argument("-c", "--clear-db", action="store_true", help="Clear existing test data from database")
+    parser.add_argument("--cookie", help="Cookie ID to set for new entries")
 
     args = parser.parse_args()
 
@@ -215,8 +216,8 @@ def main():
 
             cursor.execute(
                 """
-                INSERT INTO renpy_snippet (title, author, description, catagory, tags, cdate, mdate)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO renpy_snippet (title, author, description, catagory, tags, cdate, mdate, cookie_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
                 (
                     title,
@@ -226,6 +227,7 @@ def main():
                     ",".join(yaml_data.get("tags", [])),
                     current_time,
                     mtime,
+                    args.cookie,
                 ),
             )
 
