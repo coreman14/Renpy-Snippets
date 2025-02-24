@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { browseAdvancedSearchResult, browseAdvancedSearchSingle } from "@/db/schema";
+import { browseAdvancedSearchSingle } from "@/db/schema";
 
 import ListOfSnippets from "../components/ListOfSnippets";
 import { Nunito_Sans } from "next/font/google";
@@ -65,7 +65,7 @@ function getSortFunction(functionToGet: number) {
 
 export default function BrowsePage(props: {
     userId: string | undefined;
-    pageEntries: browseAdvancedSearchResult;
+    pageEntries: browseAdvancedSearchSingle[];
 }) {
     const [userEntries, setUserEntries] = useState(false);
     const [sortBy, setSortBy] = useState(0);
@@ -73,7 +73,7 @@ export default function BrowsePage(props: {
     const [codeSearch, setCodeSearch] = useState("");
     const divRef = useRef<HTMLSelectElement>(null);
     const dimensions = useRefDimensions(divRef);
-    let sortedArray = Object.values(props.pageEntries).toSorted(getSortFunction(sortBy));
+    let sortedArray = props.pageEntries.toSorted(getSortFunction(sortBy));
     if (codeSearch){
         sortedArray = sortedArray.filter((x) => x.files.some((y) => y.filename.includes(codeSearch) || y.code.includes(codeSearch)))
     }

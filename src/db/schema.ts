@@ -104,6 +104,8 @@ export const browseAdvancedSearch = async function (filterString: string, orderB
             like(renpyTable.catagory, filterString)
         )
     ).orderBy(orderBy).all();
+    const id_order = new Set(rows.map((x) => x.snippet.id))
+    const resultArray: browseAdvancedSearchSingle[] = []
     const result = rows.reduce<browseAdvancedSearchResult>(
         (acc, row) => {
           const snippet = row.snippet;
@@ -118,6 +120,7 @@ export const browseAdvancedSearch = async function (filterString: string, orderB
         },
         {}
       );
-    return result
+    id_order.forEach((x) => resultArray.push(result[x]) )
+    return resultArray
 
 };
