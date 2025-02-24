@@ -1,11 +1,11 @@
 'use client'
-import {  renpyTable } from "@/db/schema";
+import { browseAdvancedSearchSingle } from "@/db/schema";
 import ListOfSnippets from "./components/ListOfSnippets";
 import Link from "next/link";
 
 export default function MostRecent(props: {
     userId: string | undefined;
-    pageEntries: typeof renpyTable.$inferSelect[];
+    pageEntries: browseAdvancedSearchSingle[];
     limit?: number;
 }) {
     const limit = props.limit || 6;
