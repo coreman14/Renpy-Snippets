@@ -1,12 +1,13 @@
 "use client";
 
 import { renpyFileDefaultNewFile, renpyfilesTable } from "@/db/schema";
-import { useRef, useState, KeyboardEvent, Dispatch } from "react";
+import { useRef, useState, KeyboardEvent, Dispatch, useEffect } from "react";
 
 //Light syntax cause I can't get it to not rerender
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { darcula as darkTheme, nnfx as lightTheme } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import renpy from "react-syntax-highlighter/dist/esm/languages/hljs/python";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 SyntaxHighlighter.registerLanguage("renpy", renpy);
 
 export default function CodePlace(props: {
@@ -247,8 +248,23 @@ function EditCodePlace(props: {
 }
 
 function ViewCodePlace(props: { files: (typeof renpyfilesTable.$inferSelect)[] }) {
-    const [currentTab, setCurrentTab] = useState(0);
-    const darkModeTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const searchParams = useSearchParams();
+    const router = useRouter()
+    const pathname = usePathname()
+
+    const [currentTab, setCurrentTab] = useState(Math.max(parseInt(searchParams.get("file") || "1") - 1, 0));
+    let darkModeTheme = true;
+    if (typeof window !== "undefined") {
+        darkModeTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+
+    useEffect(() => {
+        const nextSearchParams = new URLSearchParams(searchParams.toString())
+        if (nextSearchParams.has("file")){
+            nextSearchParams.delete('file')
+            router.replace(`${pathname}?${nextSearchParams}`)
+        }
+    });
     const maxWidth = "98vw";
     const codeTabs = props.files.map((x, ind) => (
         <SyntaxHighlighter
