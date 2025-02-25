@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { browseAdvancedSearchSingle } from "@/db/schema";
 import Link from "next/link";
@@ -9,6 +9,8 @@ import { useState } from "react";
 import { DeleteButton } from "./DeleteButton";
 import { blankLine } from "../utils/definitions";
 
+const maximumFilesToShow = 5;
+
 export default function GridView(props: {
     itemsToDisplay: browseAdvancedSearchSingle[];
     showOnlyUserEntries?: boolean;
@@ -17,13 +19,15 @@ export default function GridView(props: {
 }) {
     const [dateOfCall] = useState(new Date().getTime());
     const searchParams = useSearchParams();
-    
     return (
         <div className="flex flex-wrap gap-6 pb-3">
             {props.itemsToDisplay
                 .filter((x) => !props.showOnlyUserEntries || props.userId == x.snippet.cookie_id)
                 .map((x) => (
-                    <div key={x.snippet.id} className="grow-0 shrink-0 basis-[calc(33%-1rem)] min-w-[300px] p-4 pt-2 pl-2 border-2 rounded-lg border-[var(--layout-bar-back)] flex-col flex pb-1">
+                    <div
+                        key={x.snippet.id}
+                        className="grow-0 shrink-0 basis-[calc(33%-1rem)] min-w-[300px] p-4 pt-2 pl-2 border-2 rounded-lg border-[var(--layout-bar-back)] flex-col flex pb-1"
+                    >
                         <div className="text-2xl text-[var(--forground-buttons)]">
                             <Link title="View Snippet" href={"/entry/" + x.snippet.id}>
                                 {x.snippet.title}
@@ -31,10 +35,10 @@ export default function GridView(props: {
                         </div>
 
                         <div className="text-gray-700 text-sm">
-                            {x.snippet.author ? "Author: " + x.snippet.author : "Author: Anonymous"}
-                            {" "}| Catagory: {x.snippet.catagory || "None"}
+                            {x.snippet.author ? "Author: " + x.snippet.author : "Author: Anonymous"} | Catagory:{" "}
+                            {x.snippet.catagory || "None"}
                         </div>
-                        
+
                         <div className="text-gray-700 text-sm">
                             {(x.snippet.cdate == x.snippet.mdate || !props.showEditedTime ? "Posted" : "Edited") + " "}
                             {getTimeString(dateOfCall, !props.showEditedTime ? x.snippet.cdate : x.snippet.mdate)} Ago
@@ -42,13 +46,16 @@ export default function GridView(props: {
 
                         {x.snippet.description && (
                             <div className="text-[var(--layout-bar-front) mt-2 text-base">
-                                {x.snippet.description.split("\n")[0].replace(/(.{150})..+/, "$1…")}
+                                {(x.snippet.description.split("\n")[0].replace(/(.{150})..+/, "$1…") + " ").padEnd(
+                                    150,
+                                    blankLine
+                                )}
                             </div>
                         )}
 
                         <div className="mt-2 text-sm">
                             <div className="font-bold text-[var(--layout-bar-selected)] text-base">Files:</div>
-                            {x.files.slice(0,5).map((file, index) => (
+                            {x.files.slice(0, maximumFilesToShow).map((file, index) => (
                                 <Link
                                     key={index}
                                     href={`/entry/${x.snippet.id}?file=${index + 1}`}
@@ -57,24 +64,35 @@ export default function GridView(props: {
                                     {file.filename}
                                 </Link>
                             ))}
-                            {x.files.length > 5 && <span className="font-bold text-gray-700">+{x.files.length - 5} more files</span>} 
+                            {x.files.length <= maximumFilesToShow &&
+                                new Array(maximumFilesToShow).toSpliced(0, x.files.length).map((_, a) => (
+                                    <span key={a} className="emptyListSlot block max-w-fit">
+                                        {blankLine}
+                                    </span>
+                                ))}
+                            <span className="font-bold text-gray-700 emptyMoreFilesSlot block max-w-fit">
+                                {x.files.length > maximumFilesToShow ? `+${x.files.length - maximumFilesToShow} more files` : blankLine}
+                            </span>
                         </div>
 
-                        {props.userId == x.snippet.cookie_id && (
-                            <form action={deleteSnippet} className="text-[var(--forground-buttons2)] mt-auto pt-2 text-xl">
+                        <form action={deleteSnippet} className="text-[var(--forground-buttons2)] mt-auto pt-2 text-xl">
+                            <fieldset inert={props.userId != x.snippet.cookie_id} className="*:inert:text-black">
                                 <Link href={"/entry/edit/" + x.snippet.id} title="Edit snippet">
                                     Edit
                                 </Link>
                                 <DeleteButton />
-                                <input type="hidden" value={x.snippet.id} name="id" />
-                                <input type="hidden" value={searchParams.get("searchTerm") || ""} name="searchFilter" />
-                                <input type="hidden" value="recent" name="currentPage" id="currentPage"></input>
-                            </form>
-                        ) || blankLine}
+                                <input type="hidden" value={x.snippet.id} name="id" id="id"></input>
+                                <input type="hidden" value="browse" name="currentPage" id="currentPage"></input>
+                                <input
+                                    type="hidden"
+                                    value={searchParams.get("searchTerm") || ""}
+                                    name="searchFilter"
+                                    id="searchFilter"
+                                />
+                            </fieldset>
+                        </form>
                     </div>
                 ))}
         </div>
     );
 }
-
-

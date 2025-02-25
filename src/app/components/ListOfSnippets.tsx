@@ -6,7 +6,6 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { getTimeString } from "./snippetDisplayFunction";
 import { DeleteButton } from "./DeleteButton";
-import { blankLine } from "../utils/definitions";
 
 export default function ListOfSnippets(props: {
     itemsToDisplay: browseAdvancedSearchSingle[];
@@ -31,25 +30,23 @@ export default function ListOfSnippets(props: {
                     {getTimeString(dateOfCall, !props.showEditedTime ? x.snippet.cdate :  x.snippet.mdate )} Ago
                     {x.snippet.description && " | " + x.snippet.description.split("\n")[0].replace(/(.{30})..+/, "$1…")}
                 </div>
-                {props.userId == x.snippet.cookie_id ? (
-                    <>
-                        <form action={deleteSnippet} className="text-xl text-[var(--forground-buttons2)]">
-                            <Link href={"/entry/edit/" + x.snippet.id} title="Edit snippet">
-                                Edit
-                            </Link>
-                            <DeleteButton />
-                            <input type="hidden" value={x.snippet.id} name="id" id="id"></input>
-                            <input type="hidden" value="browse" name="currentPage" id="currentPage"></input>
-                            <input
-                                type="hidden"
-                                value={searchParams.get("searchTerm") || ""}
-                                name="searchFilter"
-                                id="searchFilter"
-                            />
-                        </form>
-                    </>
-                ) : (
-                    blankLine
-                )}
+
+                <form action={deleteSnippet} className="text-xl text-[var(--forground-buttons2)]"  title={props.userId != x.snippet.cookie_id ? "User does not have modify permissions" : ""}>
+                    <fieldset inert={props.userId != x.snippet.cookie_id } className="*:inert:text-black">
+                    <Link href={"/entry/edit/" + x.snippet.id} title="Edit snippet">
+                        Edit
+                    </Link>
+                    <DeleteButton />
+                    <input type="hidden" value={x.snippet.id} name="id" id="id"></input>
+                    <input type="hidden" value="browse" name="currentPage" id="currentPage"></input>
+                    <input
+                        type="hidden"
+                        value={searchParams.get("searchTerm") || ""}
+                        name="searchFilter"
+                        id="searchFilter"
+                    />
+                    </fieldset>
+                </form>
+
             </div>
         ))}
