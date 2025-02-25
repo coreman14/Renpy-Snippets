@@ -212,7 +212,8 @@ def main():
             current_time = int(datetime.now().timestamp() * 1000) - random.randint(1000, 500000)
             mtime = current_time + random.randint(1000, 150000)
             title = yaml_data.get("title", "")
-            print(f"Adding entry #{entries_added + 1}: {title}")
+            author = yaml_data.get("author", "")
+            print(f"Adding entry #{entries_added + 1}: {title} by {author or "Unknown"}")
 
             cursor.execute(
                 """
