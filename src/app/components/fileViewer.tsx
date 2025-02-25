@@ -131,56 +131,61 @@ function EditCodePlace(props: {
     };
     return (
         <>
-            <div className="tab mb-2 text-2xl max-w-full overflow-x-auto overflow-y-hidden">
-                {files.map((x, ind) =>
+            <div
+                className="tab mb-1 overflow-x-auto overflow-y-hidden pt-1 pb-1 max-w-full flex"
+                style={{ scrollbarWidth: "none" }}
+                onWheel={(e) => {
+                    if (e.deltaY) {
+                        e.currentTarget.scrollLeft += e.deltaY;
+                    }
+                }}
+            >
+                {props.files.map((x, ind) =>
                     x.cdate == -1 ? (
                         ""
+                    ) : editfileName && ind == currentTab ? (
+                        <input
+                            key={ind}
+                            autoFocus
+                            className="tablinks border-2 rounded-lg border-[var(--forground-buttons)] "
+                            value={x.filename}
+                            onInput={(e) => editFileName(e.currentTarget.value, ind)}
+                            onBlur={() => setEditfileName(false)}
+                            onKeyDown={(e) => {
+                                if (e.key == "Escape") {
+                                    setEditfileName(false);
+                                } else if (e.key == "Enter" || e.key == "NumpadEnter") {
+                                    e.preventDefault();
+                                    setEditfileName(false);
+                                }
+                            }}
+                        />
                     ) : (
-                        <span key={ind}>
-                            {editfileName && ind == currentTab ? (
-                                <input
-                                    autoFocus
-                                    className="tablinks border-2 rounded-lg border-[var(--forground-buttons)]"
-                                    value={x.filename}
-                                    onInput={(e) => editFileName(e.currentTarget.value, ind)}
-                                    onBlur={() => setEditfileName(false)}
-                                    onKeyDown={(e) => {
-                                        if (e.key == "Escape") {
-                                            setEditfileName(false);
-                                        } else if (e.key == "Enter" || e.key == "NumpadEnter") {
-                                            e.preventDefault();
-                                            setEditfileName(false);
-                                        }
-                                    }}
-                                ></input>
-                            ) : (
+                        <span
+                            key={ind}
+                            className={
+                                "p-1 mr-1 text-xl border-2 rounded-lg " +
+                                (ind == currentTab
+                                    ? "text-[var(--forground-buttons)] border-[var(--forground-buttons)] "
+                                    : "")
+                            }
+                            onDoubleClick={() => {
+                                setEditfileName((a) => !a);
+                            }}
+                            onClick={() => {
+                                setEditfileName(false);
+                                setCurrentTab(ind);
+                            }}
+                        >
+                            <span className={ind == currentTab ? "" : "hover"} title="Double click to edit">
+                                {x.filename}
+                            </span>
+                            {files.filter((x) => x.cdate != -1).length > 1 && (
                                 <span
-                                    className={
-                                        "pl-1 pt-1 pb-1 mr-1 border-2 rounded-lg z-10 " +
-                                        (ind == currentTab
-                                            ? "text-[var(--forground-buttons)] border-[var(--forground-buttons)]"
-                                            : "")
-                                    }
+                                    onClick={() => removeFile(ind)}
+                                    className="p-1 text-[var(--forground-buttons2)] hover"
                                 >
-                                    <span
-                                        className={ind == currentTab ? "" : "hover"}
-                                        onClick={() => {
-                                            setCurrentTab(ind);
-                                            setEditfileName(false);
-                                        }}
-                                        onDoubleClick={() => setEditfileName((a) => !a)}
-                                        title="Double click to edit"
-                                    >
-                                        {x.filename + " "}
-                                    </span>
-                                    {files.filter((x) => x.cdate != -1).length > 1 && (
-                                        <span
-                                            onClick={() => removeFile(ind)}
-                                            className="pr-1 text-[var(--forground-buttons2)] hover"
-                                        >
-                                            x
-                                        </span>
-                                    )}
+                                    x
                                 </span>
                             )}
                         </span>
@@ -188,7 +193,7 @@ function EditCodePlace(props: {
                 )}
                 <span
                     key="newTab"
-                    className="tablinks text-[var(--forground-buttons2)] border-2 rounded-md p-1 hover border-[var(--forground-buttons2)]"
+                    className="tablinks text-xl text-[var(--forground-buttons2)] border-2 rounded-md p-1 hover border-[var(--forground-buttons2)]"
                     onClick={createNewFile}
                 >
                     +
@@ -248,7 +253,7 @@ function ViewCodePlace(props: { files: (typeof renpyfilesTable.$inferSelect)[] }
     const codeTabs = props.files.map((x, ind) => (
         <SyntaxHighlighter
             key={ind}
-            customStyle={{ maxWidth: maxWidth, maxHeight: "60vh" }}
+            customStyle={{ maxWidth: "98vw", maxHeight: "60vh" }}
             language="renpy"
             style={darkModeTheme ? darkTheme : lightTheme}
             showLineNumbers={true}
@@ -260,8 +265,12 @@ function ViewCodePlace(props: { files: (typeof renpyfilesTable.$inferSelect)[] }
         <>
             <div
                 className="tab mb-1 overflow-x-auto overflow-y-hidden pt-1 pb-1"
-                style={{ scrollbarWidth: "none", maxWidth: maxWidth}}
-                onWheel={(e) => { if (e.deltaY) { e.currentTarget.scrollLeft += e.deltaY}}}
+                style={{ scrollbarWidth: "none", maxWidth: maxWidth }}
+                onWheel={(e) => {
+                    if (e.deltaY) {
+                        e.currentTarget.scrollLeft += e.deltaY;
+                    }
+                }}
             >
                 {props.files.map((x, ind) =>
                     x.cdate == -1 ? (
