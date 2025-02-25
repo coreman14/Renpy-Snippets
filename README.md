@@ -7,7 +7,7 @@
 - [X] Add syntax highlighting in view page.
 - [X] Finish CSS on pages. ~~Create/edit, view and top bar of browse page and make layout search nicer~~
 - [X] Add code search. Search bar on browse that specifically searches code files (name and code)
-- [ ] Make view/create page able to sroll filenames if too many
+- [X] Make view/create page able to scroll filenames if too many
 - [ ] Add grid view for Recent and Browse
 - [ ] Additional pages: Author page (By clicking on the author name you can go to a page that only has that authors snips), Category page (Same thing as the author)
 - [ ] Add import button. It takes a zip folder and adds every RPY it could find to the project.
