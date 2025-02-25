@@ -23,6 +23,15 @@
   }
 }
 
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-gray-400);
+}
+
+input, select, optgroup, textarea, ::file-selector-button {
+  background-color: white;
+}
+
 :root {
   --background: #a2c9db;
   --input-background: #27556C;
@@ -79,6 +88,7 @@ body {
 #createViewForm .stanInput:focus {
   border-color: var(--layout-bar-back);
 }
+
 
 
 
