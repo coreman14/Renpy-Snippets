@@ -68,6 +68,10 @@ export type browseAdvancedSearchSingle = {
     snippet: DB_renpyTable;
     files: DB_renpyFileTable[];
 };
+export type browseAdvancedSearchSingleFile = {
+    snippet: DB_renpyTable;
+    files: DB_renpyFileTable | null;
+};
 
 export const browseSimpleSearch = async function (filterString: string, orderBy: SQL | null = null) {
     if (!orderBy) {
@@ -88,6 +92,24 @@ export const browseSimpleSearch = async function (filterString: string, orderBy:
         )
         .orderBy(orderBy);
 };
+
+function getResultsAsArray(rows: browseAdvancedSearchSingleFile[]){
+    const id_order = new Set(rows.map((x) => x.snippet.id));
+    const resultArray: browseAdvancedSearchSingle[] = [];
+    const result = rows.reduce<browseAdvancedSearchResult>((acc, row) => {
+        const snippet = row.snippet;
+        const files = row.files;
+        if (!acc[snippet.id]) {
+            acc[snippet.id] = { snippet, files: [] };
+        }
+        if (files) {
+            acc[snippet.id].files.push(files);
+        }
+        return acc;
+    }, {});
+    id_order.forEach((x) => resultArray.push(result[x]));
+    return resultArray;
+}
 
 export const browseAdvancedSearch = async function (filterString: string, orderBy: SQL | null = null) {
     if (!orderBy) {
@@ -112,21 +134,7 @@ export const browseAdvancedSearch = async function (filterString: string, orderB
         )
         .orderBy(orderBy)
         .all();
-    const id_order = new Set(rows.map((x) => x.snippet.id));
-    const resultArray: browseAdvancedSearchSingle[] = [];
-    const result = rows.reduce<browseAdvancedSearchResult>((acc, row) => {
-        const snippet = row.snippet;
-        const files = row.files;
-        if (!acc[snippet.id]) {
-            acc[snippet.id] = { snippet, files: [] };
-        }
-        if (files) {
-            acc[snippet.id].files.push(files);
-        }
-        return acc;
-    }, {});
-    id_order.forEach((x) => resultArray.push(result[x]));
-    return resultArray;
+    return getResultsAsArray(rows);
 };
 export const authorAdvancedSearch = async function (author: string, orderBy: SQL | null = null) {
     if (!orderBy) {
@@ -143,21 +151,7 @@ export const authorAdvancedSearch = async function (author: string, orderBy: SQL
         .where(sql`lower(${renpyTable.author}) = ${author.toLowerCase()}`)
         .orderBy(orderBy)
         .all();
-    const id_order = new Set(rows.map((x) => x.snippet.id));
-    const resultArray: browseAdvancedSearchSingle[] = [];
-    const result = rows.reduce<browseAdvancedSearchResult>((acc, row) => {
-        const snippet = row.snippet;
-        const files = row.files;
-        if (!acc[snippet.id]) {
-            acc[snippet.id] = { snippet, files: [] };
-        }
-        if (files) {
-            acc[snippet.id].files.push(files);
-        }
-        return acc;
-    }, {});
-    id_order.forEach((x) => resultArray.push(result[x]));
-    return resultArray;
+        return getResultsAsArray(rows);
 };
 export const catagoryAdvancedSearch = async function (catagory: string, orderBy: SQL | null = null) {
     if (!orderBy) {
@@ -174,19 +168,5 @@ export const catagoryAdvancedSearch = async function (catagory: string, orderBy:
         .where(sql`lower(${renpyTable.catagory}) = ${catagory.toLowerCase()}`)
         .orderBy(orderBy)
         .all();
-    const id_order = new Set(rows.map((x) => x.snippet.id));
-    const resultArray: browseAdvancedSearchSingle[] = [];
-    const result = rows.reduce<browseAdvancedSearchResult>((acc, row) => {
-        const snippet = row.snippet;
-        const files = row.files;
-        if (!acc[snippet.id]) {
-            acc[snippet.id] = { snippet, files: [] };
-        }
-        if (files) {
-            acc[snippet.id].files.push(files);
-        }
-        return acc;
-    }, {});
-    id_order.forEach((x) => resultArray.push(result[x]));
-    return resultArray;
+        return getResultsAsArray(rows);
 };
