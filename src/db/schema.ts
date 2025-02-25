@@ -1,27 +1,8 @@
 import "dotenv/config";
-import { or, relations, like, SQL, desc, eq } from "drizzle-orm";
+import { or, relations, like, SQL, desc, eq, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/libsql";
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 export const db = drizzle(process.env.DB_FILE_NAME!);
-
-export const browseSimpleSearch = async function (filterString: string, orderBy:  SQL | null = null) {
-    if (!orderBy){
-        orderBy = desc(renpyTable.mdate)
-    }
-    filterString = `%${filterString}%`
-    return await db
-        .select()
-        .from(renpyTable)
-        .where(
-            or(
-                like(renpyTable.title, filterString),
-                like(renpyTable.author, filterString),
-                like(renpyTable.tags, filterString),
-                like(renpyTable.description, filterString),
-                like(renpyTable.catagory, filterString)
-            )
-        ).orderBy(orderBy);
-};
 
 export const renpyTable = sqliteTable("renpy_snippet", {
     id: int().primaryKey({ autoIncrement: true }),
@@ -76,51 +57,136 @@ export const renpyFileDefaultNewFile: DB_renpyFileTable = {
 };
 
 // result type
-export type browseAdvancedSearchResult = Record<number, {
-    snippet: DB_renpyTable;
-    files: DB_renpyFileTable[];
-}>;
+export type browseAdvancedSearchResult = Record<
+    number,
+    {
+        snippet: DB_renpyTable;
+        files: DB_renpyFileTable[];
+    }
+>;
 export type browseAdvancedSearchSingle = {
     snippet: DB_renpyTable;
     files: DB_renpyFileTable[];
 };
 
-
-
-export const browseAdvancedSearch = async function (filterString: string, orderBy:  SQL | null = null) {
-    if (!orderBy){
-        orderBy = desc(renpyTable.mdate)
+export const browseSimpleSearch = async function (filterString: string, orderBy: SQL | null = null) {
+    if (!orderBy) {
+        orderBy = desc(renpyTable.mdate);
     }
-    filterString = `%${filterString}%`
-    const rows = await db.select({
-        snippet: renpyTable,
-        files: renpyfilesTable,
-      }).from(renpyTable).leftJoin(renpyfilesTable, eq(renpyTable.id, renpyfilesTable.snippet_id)).where(
-        or(
-            like(renpyTable.title, filterString),
-            like(renpyTable.author, filterString),
-            like(renpyTable.tags, filterString),
-            like(renpyTable.description, filterString),
-            like(renpyTable.catagory, filterString)
+    filterString = `%${filterString}%`;
+    return await db
+        .select()
+        .from(renpyTable)
+        .where(
+            or(
+                like(renpyTable.title, filterString),
+                like(renpyTable.author, filterString),
+                like(renpyTable.tags, filterString),
+                like(renpyTable.description, filterString),
+                like(renpyTable.catagory, filterString)
+            )
         )
-    ).orderBy(orderBy).all();
-    const id_order = new Set(rows.map((x) => x.snippet.id))
-    const resultArray: browseAdvancedSearchSingle[] = []
-    const result = rows.reduce<browseAdvancedSearchResult>(
-        (acc, row) => {
-          const snippet = row.snippet;
-          const files = row.files;
-          if (!acc[snippet.id]) {
-            acc[snippet.id] = { snippet, files: [] };
-          }
-          if (files) {
-            acc[snippet.id].files.push(files);
-          }
-          return acc;
-        },
-        {}
-      );
-    id_order.forEach((x) => resultArray.push(result[x]) )
-    return resultArray
+        .orderBy(orderBy);
+};
 
+export const browseAdvancedSearch = async function (filterString: string, orderBy: SQL | null = null) {
+    if (!orderBy) {
+        orderBy = desc(renpyTable.mdate);
+    }
+    filterString = `%${filterString}%`;
+    const rows = await db
+        .select({
+            snippet: renpyTable,
+            files: renpyfilesTable,
+        })
+        .from(renpyTable)
+        .leftJoin(renpyfilesTable, eq(renpyTable.id, renpyfilesTable.snippet_id))
+        .where(
+            or(
+                like(renpyTable.title, filterString),
+                like(renpyTable.author, filterString),
+                like(renpyTable.tags, filterString),
+                like(renpyTable.description, filterString),
+                like(renpyTable.catagory, filterString)
+            )
+        )
+        .orderBy(orderBy)
+        .all();
+    const id_order = new Set(rows.map((x) => x.snippet.id));
+    const resultArray: browseAdvancedSearchSingle[] = [];
+    const result = rows.reduce<browseAdvancedSearchResult>((acc, row) => {
+        const snippet = row.snippet;
+        const files = row.files;
+        if (!acc[snippet.id]) {
+            acc[snippet.id] = { snippet, files: [] };
+        }
+        if (files) {
+            acc[snippet.id].files.push(files);
+        }
+        return acc;
+    }, {});
+    id_order.forEach((x) => resultArray.push(result[x]));
+    return resultArray;
+};
+export const authorAdvancedSearch = async function (author: string, orderBy: SQL | null = null) {
+    if (!orderBy) {
+        orderBy = desc(renpyTable.mdate);
+    }
+
+    const rows = await db
+        .select({
+            snippet: renpyTable,
+            files: renpyfilesTable,
+        })
+        .from(renpyTable)
+        .leftJoin(renpyfilesTable, eq(renpyTable.id, renpyfilesTable.snippet_id))
+        .where(sql`lower(${renpyTable.author}) = ${author.toLowerCase()}`)
+        .orderBy(orderBy)
+        .all();
+    const id_order = new Set(rows.map((x) => x.snippet.id));
+    const resultArray: browseAdvancedSearchSingle[] = [];
+    const result = rows.reduce<browseAdvancedSearchResult>((acc, row) => {
+        const snippet = row.snippet;
+        const files = row.files;
+        if (!acc[snippet.id]) {
+            acc[snippet.id] = { snippet, files: [] };
+        }
+        if (files) {
+            acc[snippet.id].files.push(files);
+        }
+        return acc;
+    }, {});
+    id_order.forEach((x) => resultArray.push(result[x]));
+    return resultArray;
+};
+export const catagoryAdvancedSearch = async function (catagory: string, orderBy: SQL | null = null) {
+    if (!orderBy) {
+        orderBy = desc(renpyTable.mdate);
+    }
+
+    const rows = await db
+        .select({
+            snippet: renpyTable,
+            files: renpyfilesTable,
+        })
+        .from(renpyTable)
+        .leftJoin(renpyfilesTable, eq(renpyTable.id, renpyfilesTable.snippet_id))
+        .where(sql`lower(${renpyTable.catagory}) = ${catagory.toLowerCase()}`)
+        .orderBy(orderBy)
+        .all();
+    const id_order = new Set(rows.map((x) => x.snippet.id));
+    const resultArray: browseAdvancedSearchSingle[] = [];
+    const result = rows.reduce<browseAdvancedSearchResult>((acc, row) => {
+        const snippet = row.snippet;
+        const files = row.files;
+        if (!acc[snippet.id]) {
+            acc[snippet.id] = { snippet, files: [] };
+        }
+        if (files) {
+            acc[snippet.id].files.push(files);
+        }
+        return acc;
+    }, {});
+    id_order.forEach((x) => resultArray.push(result[x]));
+    return resultArray;
 };

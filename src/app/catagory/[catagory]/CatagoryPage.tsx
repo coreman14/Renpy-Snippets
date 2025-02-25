@@ -2,17 +2,21 @@
 
 import { useEffect, useRef, useState } from "react";
 import { browseAdvancedSearchSingle } from "@/db/schema";
-import ListOfSnippets from "../components/ListOfSnippets";
+
+import ListOfSnippets from "../../components/ListOfSnippets";
 import { Nunito_Sans } from "next/font/google";
 import React from "react";
-import ViewSelector, { ViewType } from "../components/ViewSelector";
-import { getStoredViewPreference, setStoredViewPreference } from "../utils/storage";
-import GridView from "../components/GridView";
-import { getSortFunction, sortOptions, useRefDimensions } from "../utils/browseUtils";
-
+import ViewSelector, { ViewType } from "../../components/ViewSelector";
+import { getStoredViewPreference, setStoredViewPreference } from "../../utils/storage";
+import GridView from "../../components/GridView";
+import { getSortFunction, sortOptions, useRefDimensions } from "@/app/utils/browseUtils";
 const roboto = Nunito_Sans({ weight: "500", subsets: ["latin"] });
 
-export default function BrowsePage(props: { userId: string | undefined; pageEntries: browseAdvancedSearchSingle[] }) {
+export default function CatagoryPage(props: {
+    userId: string | undefined;
+    pageEntries: browseAdvancedSearchSingle[];
+    catagory: string;
+}) {
     const [currentView, setCurrentView] = useState<ViewType>("list");
 
     useEffect(() => {
@@ -25,6 +29,7 @@ export default function BrowsePage(props: { userId: string | undefined; pageEntr
     };
     const [userEntries, setUserEntries] = useState(false);
     const [sortBy, setSortBy] = useState(0);
+    // 0 => Edit new to old, 1 Edit old to new, 2 Created new to old, 3 Created old to new, 4 title a-z, 5 title z-a, 6 catagory a-z, 7 catagory z-a
     const [codeSearch, setCodeSearch] = useState("");
     const divRef = useRef<HTMLSelectElement>(null);
     const dimensions = useRefDimensions(divRef);
@@ -34,11 +39,10 @@ export default function BrowsePage(props: { userId: string | undefined; pageEntr
             x.files.some((y) => y.filename.includes(codeSearch) || y.code.includes(codeSearch))
         );
     }
-
     return (
         <>
             <div className="flex justify-between items-center pb-4 pt-2">
-                <h1 className="text-2xl text-[var(--layout-bar-selected)]">Browse All</h1>
+                <h1 className="text-2xl text-[var(--layout-bar-selected)]">&quot;{props.catagory}&quot; Snippets</h1>
                 <ViewSelector currentView={currentView} onViewChange={handleViewChange} />
             </div>
             <div className="grid-rows-3 grid w-80 gap-2 min-h-fit">

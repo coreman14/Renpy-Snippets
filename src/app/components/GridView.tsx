@@ -35,8 +35,35 @@ export default function GridView(props: {
                         </div>
 
                         <div className="text-gray-700 text-sm">
-                            {x.snippet.author ? "Author: " + x.snippet.author : "Author: Anonymous"} | Catagory:{" "}
-                            {x.snippet.catagory || "None"}
+                            {x.snippet.author ? (
+                                <>
+                                    {"Author: "}
+                                    <Link
+                                        className="text-[var(--forground-buttons2)]"
+                                        href={`/author/${encodeURIComponent(x.snippet.author)}`}
+                                        title={"See other snippets by " + x.snippet.author}
+                                    >
+                                        {x.snippet.author}
+                                    </Link>
+                                </>
+                            ) : (
+                                "Author: Anonymous"
+                            )}{" "}
+                            |{" "}
+                            {x.snippet.catagory ? (
+                                <>
+                                    {"Catagory: "}
+                                    <Link
+                                        className="text-[var(--forground-buttons2)]"
+                                        href={`/catagory/${encodeURIComponent(x.snippet.catagory)}`}
+                                        title={"See other snippets by " + x.snippet.catagory}
+                                    >
+                                        {x.snippet.catagory}
+                                    </Link>
+                                </>
+                            ) : (
+                                "Catagory: None"
+                            )}
                         </div>
 
                         <div className="text-gray-700 text-sm">
@@ -71,7 +98,9 @@ export default function GridView(props: {
                                     </span>
                                 ))}
                             <span className="font-bold text-gray-700 emptyMoreFilesSlot block max-w-fit">
-                                {x.files.length > maximumFilesToShow ? `+${x.files.length - maximumFilesToShow} more files` : blankLine}
+                                {x.files.length > maximumFilesToShow
+                                    ? `+${x.files.length - maximumFilesToShow} more files`
+                                    : blankLine}
                             </span>
                         </div>
 

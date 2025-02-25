@@ -8,7 +8,7 @@
 - [X] Finish CSS on pages. ~~Create/edit, view and top bar of browse page and make layout search nicer~~
 - [X] Add code search. Search bar on browse that specifically searches code files (name and code)
 - [X] Make view/create page able to scroll filenames if too many
-- [ ] Add grid view for Recent and Browse
+- [X] Add grid view for Recent and Browse
 - [X] Additional pages: Author page (By clicking on the author name you can go to a page that only has that authors snips), Category page (Same thing as the author)
 - [ ] Add download button that gives the project back as proper files in a zip
 - [ ] Add user should be able to start an edit of the snippet from the view page
