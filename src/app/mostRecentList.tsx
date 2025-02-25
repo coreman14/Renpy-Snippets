@@ -1,7 +1,11 @@
 'use client'
 import { browseAdvancedSearchSingle } from "@/db/schema";
 import ListOfSnippets from "./components/ListOfSnippets";
+import GridView from "./components/GridView";
 import Link from "next/link";
+import ViewSelector, { ViewType } from "./components/ViewSelector";
+import { useState, useEffect } from "react";
+import { getStoredViewPreference, setStoredViewPreference } from "./utils/storage";
 
 export default function MostRecent(props: {
     userId: string | undefined;
@@ -9,20 +13,38 @@ export default function MostRecent(props: {
     limit?: number;
 }) {
     const limit = props.limit || 6;
+    const [currentView, setCurrentView] = useState<ViewType>('list');
+    
+    useEffect(() => {
+        setCurrentView(getStoredViewPreference());
+    }, []);
+
+    const handleViewChange = (view: ViewType) => {
+        setCurrentView(view);
+        setStoredViewPreference(view);
+    };
+
     let overLimit = false;
     let entries = props.pageEntries;
-    if (entries.length > limit){
+    if (entries.length > limit) {
         overLimit = true;
         entries = entries.slice(0, limit)
     }
+
     return (
         <>
-            <h1 className="text-2xl text-[var(--layout-bar-selected)] pb-4 pt-2">Most Recent Submissions</h1>
-            <div>
-            <ListOfSnippets itemsToDisplay={entries} showOnlyUserEntries={false} userId={props.userId}></ListOfSnippets>
+            <div className="flex justify-between items-center pb-4 pt-2">
+                <h1 className="text-2xl text-[var(--layout-bar-selected)]">Most Recent Submissions</h1>
+                <ViewSelector currentView={currentView} onViewChange={handleViewChange} />
             </div>
-            {overLimit && <Link className="text-sm text-[var(--forground-buttons2)]" href="/browse">See all snippets</Link>}
-
+            <div>
+                {currentView === "list" ? (
+                    <ListOfSnippets itemsToDisplay={entries} showOnlyUserEntries={false} userId={props.userId} />
+                ) : (
+                    <GridView itemsToDisplay={entries} showOnlyUserEntries={false} userId={props.userId} />
+                )}
+            </div>
+            {overLimit && <Link className="text-xl text-[var(--forground-buttons2)]" href="/browse">See all snippets</Link>}
         </>
     );
 }

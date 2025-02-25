@@ -3,9 +3,9 @@ import { browseAdvancedSearchSingle } from "@/db/schema";
 import Link from "next/link";
 import { deleteSnippet } from "../api";
 import { useSearchParams } from "next/navigation";
-import { useFormStatus } from "react-dom";
 import { useState } from "react";
 import { getTimeString } from "./snippetDisplayFunction";
+import { DeleteButton } from "./DeleteButton";
 
 export default function ListOfSnippets(props: {
     itemsToDisplay: browseAdvancedSearchSingle[];
@@ -17,7 +17,7 @@ export default function ListOfSnippets(props: {
     const searchParams = useSearchParams();
     return props.itemsToDisplay.filter((x) => !props.showOnlyUserEntries || props.userId == x.snippet.cookie_id)
         .map((x) => (
-            <div key={x.snippet.id}>
+            <div key={x.snippet.id} className="pb-6 last-of-type:pb-4">
                 <div className="text-2xl text-[var(--forground-buttons)]">
                     <Link title="View Snippet" href={"/entry/" + x.snippet.id}>
                         {x.snippet.title}
@@ -38,6 +38,7 @@ export default function ListOfSnippets(props: {
                             </Link>
                             <DeleteButton />
                             <input type="hidden" value={x.snippet.id} name="id" id="id"></input>
+                            <input type="hidden" value="browse" name="currentPage" id="currentPage"></input>
                             <input
                                 type="hidden"
                                 value={searchParams.get("searchTerm") || ""}
@@ -49,16 +50,5 @@ export default function ListOfSnippets(props: {
                 ) : (
                     ""
                 )}
-                <br />
             </div>
         ))}
-
-
-function DeleteButton() {
-    const { pending } = useFormStatus();
-    return (
-        <button type="submit" disabled={pending} className="disabled:text-black pl-2" title="Delete Snippet">
-            Delete
-        </button>
-    );
-}

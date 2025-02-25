@@ -1,11 +1,14 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { browseAdvancedSearchSingle } from "@/db/schema";
 
 import ListOfSnippets from "../components/ListOfSnippets";
 import { Nunito_Sans } from "next/font/google";
 import React from "react";
+import ViewSelector, { ViewType } from "../components/ViewSelector";
+import { getStoredViewPreference, setStoredViewPreference } from "../utils/storage";
+import GridView from "../components/GridView";
 const roboto = Nunito_Sans({weight: "500", subsets: ["latin"]});
 
 const useRefDimensions = (ref: React.RefObject<HTMLSelectElement | null>) => {
@@ -67,6 +70,16 @@ export default function BrowsePage(props: {
     userId: string | undefined;
     pageEntries: browseAdvancedSearchSingle[];
 }) {
+    const [currentView, setCurrentView] = useState<ViewType>('list');
+    
+    useEffect(() => {
+        setCurrentView(getStoredViewPreference());
+    }, []);
+
+    const handleViewChange = (view: ViewType) => {
+        setCurrentView(view);
+        setStoredViewPreference(view);
+    };
     const [userEntries, setUserEntries] = useState(false);
     const [sortBy, setSortBy] = useState(0);
     // 0 => Edit new to old, 1 Edit old to new, 2 Created new to old, 3 Created old to new, 4 title a-z, 5 title z-a, 6 catagory a-z, 7 catagory z-a
@@ -79,7 +92,10 @@ export default function BrowsePage(props: {
     }
     return (
         <>
-            <h1 className="text-2xl text-[var(--layout-bar-selected)] pb-4 pt-2">Browse All</h1>
+            <div className="flex justify-between items-center pb-4 pt-2">
+                <h1 className="text-2xl text-[var(--layout-bar-selected)]">Browse All</h1>
+                <ViewSelector currentView={currentView} onViewChange={handleViewChange} />
+            </div>
             <div className="grid-rows-3 grid w-80 gap-2 min-h-fit">
                 <div className="checkbox-wrapper-14 grid-cols-2 grid">
                     <label htmlFor="showUsersSnippets">Show my snippets:</label>
@@ -123,12 +139,13 @@ export default function BrowsePage(props: {
                 </div>
             </div>
             <br/>
-            <ListOfSnippets
-                itemsToDisplay={sortedArray}
-                showOnlyUserEntries={userEntries}
-                userId={props.userId}
-                showEditedTime={true}
-            ></ListOfSnippets>
+            <div>
+                {currentView === "list" ? (
+                    <ListOfSnippets itemsToDisplay={sortedArray} showOnlyUserEntries={userEntries} userId={props.userId} showEditedTime={true}/>
+                ) : (
+                    <GridView itemsToDisplay={sortedArray} showOnlyUserEntries={userEntries} userId={props.userId} showEditedTime={true}/>
+                )}
+            </div>
         </>
     );
 }

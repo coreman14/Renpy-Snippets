@@ -88,5 +88,12 @@ export async function deleteSnippet(formData: FormData){
   const id = Number.parseInt(formData.get("id")?.toString() || "-1")
   await db.delete(renpyfilesTable).where(eq(renpyfilesTable.snippet_id, id))
   await db.delete(renpyTable).where(eq(renpyTable.id, id))
-  redirect("/browse" + (searchTerm ? "?searchTerm=" + searchTerm : "" ))
+  const redirectPlace = formData.get("currentPage")?.toString();
+  const redirectEnd =  "?" + (searchTerm ? "searchTerm=" + searchTerm : "" )
+  if (redirectPlace == "browse"){
+    redirect("/browse" + redirectEnd)
+  }
+  else {
+    redirect("/" + redirectEnd)
+  }
 }
