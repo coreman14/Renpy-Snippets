@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { getTimeString } from "./snippetDisplayFunction";
 import { DeleteButton } from "./DeleteButton";
+import { blankLine } from "../utils/definitions";
 
 export default function ListOfSnippets(props: {
     itemsToDisplay: browseAdvancedSearchSingle[];
@@ -48,7 +49,7 @@ export default function ListOfSnippets(props: {
                         </form>
                     </>
                 ) : (
-                    ""
+                    blankLine
                 )}
             </div>
         ))}

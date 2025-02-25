@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { getTimeString } from "./snippetDisplayFunction";
 import { useState } from "react";
 import { DeleteButton } from "./DeleteButton";
+import { blankLine } from "../utils/definitions";
 
 export default function GridView(props: {
     itemsToDisplay: browseAdvancedSearchSingle[];
@@ -69,7 +70,7 @@ export default function GridView(props: {
                                 <input type="hidden" value={searchParams.get("searchTerm") || ""} name="searchFilter" />
                                 <input type="hidden" value="recent" name="currentPage" id="currentPage"></input>
                             </form>
-                        )}
+                        ) || blankLine}
                     </div>
                 ))}
         </div>
