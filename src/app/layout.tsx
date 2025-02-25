@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Outfit } from "next/font/google";
 import "./globals.css";
 import SearchBar from "./components/searchInput";
 import LayoutLink from "./components/LayoutLink";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,7 +14,7 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-const outfit = Outfit({weight: "400"});
+const outfit = Outfit({weight: "400", subsets: ["latin"]});
 export const metadata: Metadata = {
   title: "Renpy Snippets",
   description: "App to create and share renpy snippets",
@@ -38,7 +39,9 @@ export default function RootLayout({
             <LayoutLink href="/entry/new" text="Create"></LayoutLink>
           </div>
           <div className="w-1/2" dir="rtl">
+          <Suspense>
             <SearchBar></SearchBar>
+          </Suspense>
         </div>
         </div>
         </div>
