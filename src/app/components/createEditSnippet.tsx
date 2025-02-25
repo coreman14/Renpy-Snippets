@@ -6,6 +6,7 @@ import { renpyfilesTable, renpyTable } from "@/db/schema";
 import { useFormStatus } from "react-dom";
 import CodePlace from "./fileViewer";
 
+const blank = '\u00A0';
 const maxDescriptionLength = 450;
 
 export default function CreateOrEditSnippet(props: {
@@ -19,13 +20,13 @@ export default function CreateOrEditSnippet(props: {
     TODO: Throw some logic at the input for changing the file name, so it matches the size of the text, that way, it doesn't grow or shrink the tab
     */
     const [files, setFiles] = useState(props.entry_files);
-    const [descriptionErrorMessage, setDescriptionErrorMessage] = useState("");
+    const [descriptionErrorMessage, setDescriptionErrorMessage] = useState(blank);
     const formActionWithFiles = props.form_action.bind(null, files);
     const descriptionUpdate = function (x: HTMLTextAreaElement) {
         if (x.value.length > maxDescriptionLength) {
             setDescriptionErrorMessage("Description is too long. (" + x.value.length + "/"+maxDescriptionLength + ")");
         } else {
-            setDescriptionErrorMessage("");
+            setDescriptionErrorMessage(blank);
         }
     };
     return (
@@ -88,9 +89,9 @@ export default function CreateOrEditSnippet(props: {
                     ></textarea>
                 </div>
             </div>
-            <div className="text-red-500 text-2xl translate-x-[10.2rem] pb-4">{descriptionErrorMessage}</div>
+            <div className="text-red-500 text-2xl translate-x-[10.2rem] pb-1 max-w-fit">{descriptionErrorMessage}</div>
             <CodePlace files={files} setFiles={setFiles}></CodePlace>
-            <SubmitButton editMode={props.editing} disable={descriptionErrorMessage != ""} />
+            <SubmitButton editMode={props.editing} disable={descriptionErrorMessage != blank} />
         </form>
     );
 }
