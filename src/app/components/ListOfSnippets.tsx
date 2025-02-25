@@ -18,7 +18,7 @@ export default function ListOfSnippets(props: {
     return props.itemsToDisplay.filter((x) => !props.showOnlyUserEntries || props.userId == x.snippet.cookie_id)
         .map((x) => (
             <div key={x.snippet.id}>
-                <div className="text-xl text-[var(--forground-buttons)]">
+                <div className="text-2xl text-[var(--forground-buttons)]">
                     <Link title="View Snippet" href={"/entry/" + x.snippet.id}>
                         {x.snippet.title}
                     </Link>
@@ -32,7 +32,7 @@ export default function ListOfSnippets(props: {
                 </div>
                 {props.userId == x.snippet.cookie_id ? (
                     <>
-                        <form action={deleteSnippet} className="text-sm text-[var(--forground-buttons2)]">
+                        <form action={deleteSnippet} className="text-xl text-[var(--forground-buttons2)]">
                             <Link href={"/entry/edit/" + x.snippet.id} title="Edit snippet">
                                 Edit
                             </Link>
