@@ -6,7 +6,7 @@ import { browseAdvancedSearchSingle } from "@/db/schema";
 import ListOfSnippets from "../components/ListOfSnippets";
 import { Nunito_Sans } from "next/font/google";
 import React from "react";
-const roboto = Nunito_Sans({weight: "500"});
+const roboto = Nunito_Sans({weight: "500", subsets: ["latin"]});
 
 const useRefDimensions = (ref: React.RefObject<HTMLSelectElement | null>) => {
     const [dimensions, setDimensions] = useState({ width: 200, height: 26 })
