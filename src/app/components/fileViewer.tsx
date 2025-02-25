@@ -229,7 +229,7 @@ function EditCodePlace(props: {
                         <label htmlFor="indentSize">Indent Size</label>
                         <input
                             id="indentSize"
-                            className="ml-2 w-12 outline-none border-2 border-[var(--background)] focus:border-red-500 rounded-md pl-1 stanInput"
+                            className="ml-2 w-12 outline-hidden border-2 border-[var(--background)] focus:border-red-500 rounded-md pl-1 stanInput"
                             type="number"
                             value={indentSize}
                             onInput={(e) => {

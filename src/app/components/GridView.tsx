@@ -23,7 +23,7 @@ export default function GridView(props: {
             {props.itemsToDisplay
                 .filter((x) => !props.showOnlyUserEntries || props.userId == x.snippet.cookie_id)
                 .map((x) => (
-                    <div key={x.snippet.id} className="flex-grow-0 flex-shrink-0 basis-[calc(33%-1rem)] min-w-[300px] p-4 pt-2 pl-2 border-2 rounded-lg border-[var(--layout-bar-back)] flex-col flex pb-1">
+                    <div key={x.snippet.id} className="grow-0 shrink-0 basis-[calc(33%-1rem)] min-w-[300px] p-4 pt-2 pl-2 border-2 rounded-lg border-[var(--layout-bar-back)] flex-col flex pb-1">
                         <div className="text-2xl text-[var(--forground-buttons)]">
                             <Link title="View Snippet" href={"/entry/" + x.snippet.id}>
                                 {x.snippet.title}
