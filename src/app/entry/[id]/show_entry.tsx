@@ -7,7 +7,7 @@ import { useState } from "react";
 
 //TODO: Parsed date should be in a better format. Maybe May 05, 2025
 //TODO: We should probably add a prop for "Newly created" just to give the user some feedback the snippet was uploaded
-export default function BrowseView(props: {
+export default function EntryView(props: {
     entry: (typeof renpyTable.$inferSelect)[];
     entry_files: (typeof renpyfilesTable.$inferSelect)[];
 }) {
@@ -27,7 +27,10 @@ export default function BrowseView(props: {
         );
     }
 
-    const dateString = dateobject.toLocaleDateString("en-CA") + " " + dateobject.toLocaleTimeString("en-CA");
+    const dateString =
+        dateobject.toLocaleDateString("en-CA", { month: "long", day: "numeric", year: "numeric" }) +
+        " " +
+        dateobject.toLocaleTimeString("en-CA", {hour : "numeric", minute : "numeric"});
     return (
         <div id="editViewForm">
             <div className="text-lg text-[var(--foreground)] mb-2">

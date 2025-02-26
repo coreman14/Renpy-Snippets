@@ -1,6 +1,6 @@
 import { renpyTable, db, renpyfilesTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import BrowseView from "./show_entry";
+import EntryView from "./show_entry";
 export default async function ViewEntry(props: {
   params: Promise<{ id: number }>;
 }) {
@@ -11,6 +11,6 @@ export default async function ViewEntry(props: {
     db.select().from(renpyfilesTable).where(eq(renpyfilesTable.snippet_id, id))
   ])
 
-  return <BrowseView entry={entry} entry_files={entry_files}></BrowseView>
+  return <EntryView entry={entry} entry_files={entry_files}></EntryView>
 
 }
