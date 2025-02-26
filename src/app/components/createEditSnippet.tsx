@@ -117,6 +117,7 @@ function SubmitButton(props: { editMode?: boolean; disable?: boolean }) {
                 " border-2 rounded-lg border-[var(--forground-buttons2)] disabled:border-black p-1 " +
                 (pending || props.disable ? "" : "hover")
             }
+            title={pending ? "Uploading" : props.disable ? "Please fix submission before submitting" : "Submit form"}
         >
             {pending ? "Uploading" : props.editMode ? "Create" : "Submit Changes"}
         </button>

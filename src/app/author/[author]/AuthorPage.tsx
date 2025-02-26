@@ -9,6 +9,7 @@ import React from "react";
 import ViewSelector, { ViewType } from "../../components/ViewSelector";
 import { getStoredViewPreference, setStoredViewPreference } from "../../utils/storage";
 import { getSortFunction, sortOptions, useRefDimensions } from "@/app/utils/browseUtils";
+import Image from "next/image";
 const roboto = Nunito_Sans({ weight: "500", subsets: ["latin"] });
 
 export default function AuthorPage(props: {
@@ -72,7 +73,15 @@ export default function AuthorPage(props: {
                     </select>
                 </div>
                 <div className="grid-cols-2 grid">
-                    <label htmlFor="codeSearch">Advanced search:</label>
+                    <label htmlFor="codeSearch">
+                    <Image
+                    className="inline-block invert-100 pr-1 align-baseline"
+                    src="/question.svg"
+                    alt="Qustion Mark"
+                    width={16}
+                    height={16}
+                    title="When text is entered, show results that contain the text in the snippet's filename(s) or code."
+                />Advanced search:</label>
                     <input
                         name="codeSearch"
                         id="codeSearch"

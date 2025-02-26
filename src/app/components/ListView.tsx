@@ -47,7 +47,7 @@ export default function ListView(props: {
                             <Link
                                 className="text-[var(--forground-buttons2)]"
                                 href={`/catagory/${encodeURIComponent(x.snippet.catagory)}`}
-                                title={"See other snippets by " + x.snippet.catagory}
+                                title={"See snippets in catagory " + x.snippet.catagory}
                             >
                                 {x.snippet.catagory}
                             </Link>

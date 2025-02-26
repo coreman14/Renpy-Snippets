@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { browseAdvancedSearchSingle } from "@/db/schema";
 
@@ -72,7 +72,15 @@ export default function CatagoryPage(props: {
                     </select>
                 </div>
                 <div className="grid-cols-2 grid">
-                    <label htmlFor="codeSearch">Advanced search:</label>
+                    <label htmlFor="codeSearch">
+                    <Image
+                    className="inline-block invert-100 pr-1 align-baseline"
+                    src="/question.svg"
+                    alt="Qustion Mark"
+                    width={16}
+                    height={16}
+                    title="When text is entered, show results that contain the text in the snippet's filename(s) or code."
+                />Advanced search:</label>
                     <input
                         name="codeSearch"
                         id="codeSearch"

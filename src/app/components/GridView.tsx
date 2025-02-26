@@ -48,15 +48,14 @@ export default function GridView(props: {
                                 </>
                             ) : (
                                 "Author: Anonymous"
-                            )}{" "}
-                            |{" "}
+                            )}{" | "}
                             {x.snippet.catagory ? (
                                 <>
                                     {"Catagory: "}
                                     <Link
                                         className="text-[var(--forground-buttons2)]"
                                         href={`/catagory/${encodeURIComponent(x.snippet.catagory)}`}
-                                        title={"See other snippets by " + x.snippet.catagory}
+                                        title={"See snippets in catagory " + x.snippet.catagory}
                                     >
                                         {x.snippet.catagory}
                                     </Link>
@@ -87,6 +86,7 @@ export default function GridView(props: {
                                     key={index}
                                     href={`/entry/${x.snippet.id}?file=${index + 1}`}
                                     className="block text-[var(--forground-buttons)] hover:underline max-w-fit"
+                                    title={"View file " + file.filename}
                                 >
                                     {file.filename}
                                 </Link>

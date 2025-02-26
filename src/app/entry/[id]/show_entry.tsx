@@ -59,7 +59,7 @@ export default function EntryView(props: {
                             <Link
                                 className="text-[var(--forground-buttons2)]"
                                 href={`/catagory/${encodeURIComponent(entry.catagory)}`}
-                                title={"See other snippets by " + entry.catagory}
+                                title={"See snippets in catagory " + entry.catagory}
                             >
                                 {entry.catagory}
                             </Link>

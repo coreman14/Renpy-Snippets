@@ -12,6 +12,7 @@ export default function LayoutLink(props : {
         <Link
             className={`whitespace-nowrap pr-2 ${pathname === props.href ? "text-[var(--layout-bar-selected)]" : ""} `}
             href={props.href}
+            title={`Go to ${props.text}`}
         >
             {props.text}
         </Link>

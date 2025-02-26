@@ -160,6 +160,7 @@ function EditCodePlace(props: {
                                     setEditfileName(false);
                                 }
                             }}
+                            title="Update file name"
                         />
                     ) : (
                         <span
@@ -177,14 +178,16 @@ function EditCodePlace(props: {
                                 setEditfileName(false);
                                 setCurrentTab(ind);
                             }}
+                            title={ind == currentTab ? "" : `Switch to "${x.filename}"`}
                         >
-                            <span className={ind == currentTab ? "" : "hover"} title="Double click to edit">
+                            <span className={ind == currentTab ? "" : "hover"} title={ind == currentTab ? "Double click to edit" : `Switch to "${x.filename}"`}>
                                 {x.filename}
                             </span>
                             {files.filter((x) => x.cdate != -1).length > 1 && (
                                 <span
                                     onClick={() => removeFile(ind)}
                                     className="p-1 text-[var(--forground-buttons2)] hover"
+                                    title={`Delete "${x.filename}"`}
                                 >
                                     x
                                 </span>
@@ -196,6 +199,7 @@ function EditCodePlace(props: {
                     key="newTab"
                     className="tablinks text-xl text-[var(--forground-buttons2)] border-2 rounded-md p-1 hover border-[var(--forground-buttons2)]"
                     onClick={createNewFile}
+                    title="Create new file"
                 >
                     +
                 </span>
@@ -225,7 +229,7 @@ function EditCodePlace(props: {
                 ></textarea>
                 <div className="flex flex-1 justify-end">
                     <div></div>
-                    <div className="text-2xl">
+                    <div className="text-2xl" title="Set the number of spaces to use when pressing tab and enter">
                         <label htmlFor="indentSize">Indent Size</label>
                         <input
                             id="indentSize"
@@ -300,6 +304,7 @@ function ViewCodePlace(props: { files: (typeof renpyfilesTable.$inferSelect)[] }
                                     ? "text-[var(--forground-buttons)] border-[var(--forground-buttons)] pointer-events-none"
                                     : "hover")
                             }
+                            title={currentTab == ind ? "" : `Switch to file ${x.filename}`}
                         >
                             <span
                                 className={"tablinks" + (currentTab == ind ? "" : " ")}
