@@ -6,6 +6,7 @@ import { renpyfilesTable, renpyTable } from "@/db/schema";
 import { useFormStatus } from "react-dom";
 import CodePlace from "./fileViewer";
 import { blankLine } from "../utils/definitions";
+import Image from "next/image";
 
 const maxDescriptionLength = 450;
 
@@ -15,16 +16,14 @@ export default function CreateOrEditSnippet(props: {
     entry?: typeof renpyTable.$inferSelect;
     editing?: boolean;
 }) {
-    /*
-    TODO: For addtional tags, we should add a ? button that when you hover will tell you all the things, "Addtional index for search", "You can enter multiple tags by seperating them with commas"
-    TODO: Throw some logic at the input for changing the file name, so it matches the size of the text, that way, it doesn't grow or shrink the tab
-    */
     const [files, setFiles] = useState(props.entry_files);
     const [descriptionErrorMessage, setDescriptionErrorMessage] = useState(blankLine);
     const formActionWithFiles = props.form_action.bind(null, files);
     const descriptionUpdate = function (x: HTMLTextAreaElement) {
         if (x.value.length > maxDescriptionLength) {
-            setDescriptionErrorMessage("Description is too long. (" + x.value.length + "/"+maxDescriptionLength + ")");
+            setDescriptionErrorMessage(
+                "Description is too long. (" + x.value.length + "/" + maxDescriptionLength + ")"
+            );
         } else {
             setDescriptionErrorMessage(blankLine);
         }
@@ -67,7 +66,17 @@ export default function CreateOrEditSnippet(props: {
                     defaultValue={props.entry?.catagory || ""}
                 ></input>
 
-                <label htmlFor="tags">Search Tags</label>
+                <label htmlFor="tags">
+                    <Image
+                        className="inline-block invert-100 pr-1 align-baseline"
+                        src="/question.svg"
+                        alt="Qustion Mark"
+                        width={22}
+                        height={22}
+                        title="Additional search and filter indexes. Treat these tags as keywords you may use to find this entry later. You can assign multiple tags by seperating them with commas"
+                    />
+                    Search Tags
+                </label>
                 <input
                     className="stanInput"
                     type="text"
