@@ -3,12 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import { browseAdvancedSearchSingle } from "@/db/schema";
 
-import ListView from "../../components/ListView";
+import { ListView, GridView } from "../../utils/browseUtils";
 import { Nunito_Sans } from "next/font/google";
 import React from "react";
 import ViewSelector, { ViewType } from "../../components/ViewSelector";
 import { getStoredViewPreference, setStoredViewPreference } from "../../utils/storage";
-import GridView from "../../components/GridView";
 import { getSortFunction, sortOptions, useRefDimensions } from "@/app/utils/browseUtils";
 const roboto = Nunito_Sans({ weight: "500", subsets: ["latin"] });
 

@@ -1,7 +1,6 @@
 'use client'
 import { browseAdvancedSearchSingle } from "@/db/schema";
-import ListView from "./components/ListView";
-import GridView from "./components/GridView";
+import { ListView, GridView } from "./utils/browseUtils";
 import Link from "next/link";
 import ViewSelector, { ViewType } from "./components/ViewSelector";
 import { useState, useEffect } from "react";
@@ -14,6 +13,7 @@ export default function MostRecent(props: {
 }) {
     const limit = props.limit || 6;
     const [currentView, setCurrentView] = useState<ViewType>('list');
+    const [isLoaded, setIsLoaded] = useState(false);
     
     useEffect(() => {
         setCurrentView(getStoredViewPreference());
@@ -39,12 +39,12 @@ export default function MostRecent(props: {
             </div>
             <div>
                 {currentView === "list" ? (
-                    <ListView itemsToDisplay={entries} showOnlyUserEntries={false} userId={props.userId} />
+                    <ListView itemsToDisplay={entries} showOnlyUserEntries={false} userId={props.userId} onLoad={() => setIsLoaded(true)} />
                 ) : (
-                    <GridView itemsToDisplay={entries} showOnlyUserEntries={false} userId={props.userId} />
+                    <GridView itemsToDisplay={entries} showOnlyUserEntries={false} userId={props.userId} onLoad={() => setIsLoaded(true)} />
                 )}
             </div>
-            {overLimit && <Link className="text-xl text-[var(--forground-buttons2)]" href="/browse">See all snippets</Link>}
+            {overLimit && isLoaded && <Link className="text-xl text-[var(--forground-buttons2)]" href="/browse">See all snippets</Link>}
         </>
     );
 }

@@ -7,8 +7,7 @@ import React from "react";
 import ViewSelector, { ViewType } from "../components/ViewSelector";
 import { getStoredViewPreference, setStoredViewPreference } from "../utils/storage";
 import { getSortFunction, sortOptions, useRefDimensions } from "../utils/browseUtils";
-import ListView from "../components/ListView";
-import GridView from "../components/GridView";
+import { ListView, GridView } from "../utils/browseUtils";
 
 const roboto = Nunito_Sans({ weight: "500", subsets: ["latin"] });
 

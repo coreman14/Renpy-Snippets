@@ -2,6 +2,36 @@ import { browseAdvancedSearchSingle } from "@/db/schema";
 import { useState } from "react";
 import React from "react";
 
+import dynamic from "next/dynamic";
+
+const LoadingView = () => <h1 className="text-2xl text-[var(--layout-bar-selected)]">Loading Snippets...</h1>
+
+export const ListView = dynamic(() => import("../components/ListView").then(mod => {
+    return {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        default: (props: any) => {
+            props.onLoad?.();
+            return React.createElement(mod.default, props);
+        }
+    };
+}), {
+    ssr: false,
+    loading: LoadingView
+});
+
+export const GridView = dynamic(() => import("../components/GridView").then(mod => {
+    return {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        default: (props: any) => {
+            props.onLoad?.();
+            return React.createElement(mod.default, props);
+        }
+    };
+}), {
+    ssr: false,
+    loading: LoadingView
+});
+
 export const useRefDimensions = (ref: React.RefObject<HTMLSelectElement | null>) => {
     const [dimensions, setDimensions] = useState({ width: 200, height: 26 });
     React.useEffect(() => {
@@ -57,3 +87,5 @@ export function getSortFunction(functionToGet: number) {
                 (a.snippet.catagory || "") < (b.snippet.catagory || "") ? 1 : -1;
     }
 }
+
+
