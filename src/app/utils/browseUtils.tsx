@@ -6,28 +6,12 @@ import dynamic from "next/dynamic";
 
 const LoadingView = () => <h1 className="text-2xl text-[var(--layout-bar-selected)]">Loading Snippets...</h1>
 
-export const ListView = dynamic(() => import("../components/ListView").then(mod => {
-    return {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        default: (props: any) => {
-            props.onLoad?.();
-            return React.createElement(mod.default, props);
-        }
-    };
-}), {
+export const ListView = dynamic(() => import("../components/ListView"), {
     ssr: false,
     loading: LoadingView
 });
 
-export const GridView = dynamic(() => import("../components/GridView").then(mod => {
-    return {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        default: (props: any) => {
-            props.onLoad?.();
-            return React.createElement(mod.default, props);
-        }
-    };
-}), {
+export const GridView = dynamic(() => import("../components/GridView"), {
     ssr: false,
     loading: LoadingView
 });
