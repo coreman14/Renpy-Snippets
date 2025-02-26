@@ -1,6 +1,7 @@
 import { renpyTable, db, renpyfilesTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import EntryView from "./show_entry";
+import { cookies } from "next/headers";
 export default async function ViewEntry(props: {
   params: Promise<{ id: number }>;
 }) {
@@ -10,7 +11,7 @@ export default async function ViewEntry(props: {
     db.select().from(renpyTable).where(eq(renpyTable.id, id)),
     db.select().from(renpyfilesTable).where(eq(renpyfilesTable.snippet_id, id))
   ])
-
-  return <EntryView entry={entry} entry_files={entry_files}></EntryView>
+  const userId = (await cookies()).get("userId")?.value;
+  return <EntryView entry={entry} entry_files={entry_files} userId={userId}></EntryView>
 
 }

@@ -8,6 +8,7 @@ import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { darcula as darkTheme, nnfx as lightTheme } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import renpy from "react-syntax-highlighter/dist/esm/languages/hljs/python";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 SyntaxHighlighter.registerLanguage("renpy", renpy);
 
 export default function CodePlace(props: {
@@ -32,6 +33,7 @@ function EditCodePlace(props: {
     const [editfileName, setEditfileName] = useState(false);
     const [indentSize, setIndentSize] = useState(4);
     const textField = useRef<HTMLTextAreaElement>(null);
+    const fileBar = useRef<HTMLDivElement>(null);
     const updateCode = function (x: string, ind: number) {
         const newFiles = [...files];
         newFiles[ind].code = x;
@@ -61,18 +63,14 @@ function EditCodePlace(props: {
         if (currentTab == ind) {
             setCurrentTab(0);
         } else {
-            console.log("Did not delete current tab");
             setCurrentTab(Math.max(ind - 1, 0));
         }
         if (files[ind].id != -1) {
-            console.log("File is set to be deleted");
             //If the file is linked to the DB
             files[ind].cdate = -1; //Dont show in the file system
             files[ind].snippet_id = -1; //Remove from db
             setFiles(files.concat());
         } else {
-            console.log("File is deleted");
-            console.log(files.filter((x) => x != files[ind]));
             //If not, we can just delete it
             setFiles(files.filter((x) => x != files[ind]));
         }
@@ -130,79 +128,93 @@ function EditCodePlace(props: {
         ele.blur();
         ele.focus();
     };
+    useEffect(() => {fileBar.current?.getElementsByClassName("tablinks")[currentTab].scrollIntoView()}) //Make sure new tab is always in view
     return (
         <>
-            <div
-                className="tab mb-1 overflow-x-auto overflow-y-hidden pt-1 pb-1 max-w-full flex"
-                style={{ scrollbarWidth: "none" }}
-                onWheel={(e) => {
-                    if (e.deltaY) {
-                        e.currentTarget.scrollLeft += e.deltaY;
-                    }
-                }}
-            >
-                {props.files.map((x, ind) =>
-                    x.cdate == -1 ? (
-                        ""
-                    ) : editfileName && ind == currentTab ? (
-                        <input
-                            key={ind}
-                            autoFocus
-                            className="tablinks border-2 rounded-lg border-[var(--forground-buttons)] "
-                            value={x.filename}
-                            onInput={(e) => editFileName(e.currentTarget.value, ind)}
-                            onBlur={() => setEditfileName(false)}
-                            onKeyDown={(e) => {
-                                if (e.key == "Escape") {
-                                    setEditfileName(false);
-                                } else if (e.key == "Enter" || e.key == "NumpadEnter") {
-                                    e.preventDefault();
-                                    setEditfileName(false);
-                                }
-                            }}
-                            title="Update file name"
-                        />
-                    ) : (
-                        <span
-                            key={ind}
-                            className={
-                                "p-1 mr-1 text-xl border-2 rounded-lg " +
-                                (ind == currentTab
-                                    ? "text-[var(--forground-buttons)] border-[var(--forground-buttons)] "
-                                    : "")
-                            }
-                            onDoubleClick={() => {
-                                setEditfileName((a) => !a);
-                            }}
-                            onClick={() => {
-                                setEditfileName(false);
-                                setCurrentTab(ind);
-                            }}
-                            title={ind == currentTab ? "" : `Switch to "${x.filename}"`}
-                        >
-                            <span className={ind == currentTab ? "" : "hover"} title={ind == currentTab ? "Double click to edit" : `Switch to "${x.filename}"`}>
-                                {x.filename}
-                            </span>
-                            {files.filter((x) => x.cdate != -1).length > 1 && (
-                                <span
-                                    onClick={() => removeFile(ind)}
-                                    className="p-1 text-[var(--forground-buttons2)] hover"
-                                    title={`Delete "${x.filename}"`}
-                                >
-                                    x
-                                </span>
-                            )}
-                        </span>
-                    )
-                )}
-                <span
-                    key="newTab"
-                    className="tablinks text-xl text-[var(--forground-buttons2)] border-2 rounded-md p-1 hover border-[var(--forground-buttons2)]"
-                    onClick={createNewFile}
-                    title="Create new file"
+            <div className="flex max-w-full">
+                <div
+                    className="tab mb-1 overflow-x-auto overflow-y-hidden pt-1 pb-1 flex"
+                    style={{ scrollbarWidth: "none" }}
+                    onWheel={(e) => {
+                        if (e.deltaY) {
+                            e.currentTarget.scrollLeft += e.deltaY;
+                        }
+                    }}
+                    ref={fileBar}
                 >
-                    +
-                </span>
+                    {props.files.map((x, ind) =>
+                        x.cdate == -1 ? (
+                            ""
+                        ) : editfileName && ind == currentTab ? (
+                            <input
+                                key={ind}
+                                autoFocus
+                                className="tablinks border-2 rounded-lg border-[var(--forground-buttons)] "
+                                value={x.filename}
+                                onInput={(e) => editFileName(e.currentTarget.value, ind)}
+                                onBlur={() => setEditfileName(false)}
+                                onKeyDown={(e) => {
+                                    if (e.key == "Escape") {
+                                        setEditfileName(false);
+                                    } else if (e.key == "Enter" || e.key == "NumpadEnter") {
+                                        e.preventDefault();
+                                        setEditfileName(false);
+                                    }
+                                }}
+                                title="Update file name"
+                            />
+                        ) : (
+                            <span
+                                key={ind}
+                                className={
+                                    "tablinks p-1 mr-1 text-xl border-2 rounded-lg " +
+                                    (ind == currentTab
+                                        ? "text-[var(--forground-buttons)] border-[var(--forground-buttons)] "
+                                        : "")
+                                }
+                                onDoubleClick={() => {
+                                    setEditfileName((a) => !a);
+
+                                }}
+                                onClick={() => {
+                                    setEditfileName(false);
+                                    setCurrentTab(ind);
+                                }}
+                                title={ind == currentTab ? "" : `Switch to "${x.filename}"`}
+                            >
+                                <span
+                                    className={ind == currentTab ? "" : "hover"}
+                                    title={ind == currentTab ? "Double click to edit" : `Switch to "${x.filename}"`}
+                                >
+                                    {x.filename}
+                                </span>
+                                {files.filter((x) => x.cdate != -1).length > 1 && (
+                                    <span
+                                        onClick={(e) => {e.stopPropagation();e.preventDefault();removeFile(ind)}}
+                                        onDoubleClick={(e) => {e.stopPropagation();e.preventDefault();}} //Prevent editfile from activating
+                                        className="p-1 text-[var(--forground-buttons2)] hover"
+                                        title={`Delete "${x.filename}"`}
+                                    >
+                                        x
+                                    </span>
+                                )}
+                            </span>
+                        )
+                    )}
+                </div>
+                <div
+                    className="tab overflow-x-auto overflow-y-hidden pt-1 pb-1 min-w-fit"
+                    style={{ scrollbarWidth: "none" }}
+                >
+                    <span
+                        key="newTab"
+                        className="inline-block tablinks text-xl text-[var(--forground-buttons2)] border-2 rounded-md p-1 hover border-[var(--forground-buttons2)]"
+                        onClick={createNewFile}
+                        title="Create new file"
+                    >
+                        +
+                    </span>
+                </div>
             </div>
             <div>
                 <textarea
@@ -253,8 +265,8 @@ function EditCodePlace(props: {
 
 function ViewCodePlace(props: { files: (typeof renpyfilesTable.$inferSelect)[] }) {
     const searchParams = useSearchParams();
-    const router = useRouter()
-    const pathname = usePathname()
+    const router = useRouter();
+    const pathname = usePathname();
 
     const [currentTab, setCurrentTab] = useState(Math.max(parseInt(searchParams.get("file") || "1") - 1, 0));
     let darkModeTheme = true;
@@ -263,17 +275,18 @@ function ViewCodePlace(props: { files: (typeof renpyfilesTable.$inferSelect)[] }
     }
 
     useEffect(() => {
-        const nextSearchParams = new URLSearchParams(searchParams.toString())
-        if (nextSearchParams.has("file")){
-            nextSearchParams.delete('file')
-            router.replace(`${pathname}?${nextSearchParams}`)
+        const nextSearchParams = new URLSearchParams(searchParams.toString());
+        if (nextSearchParams.has("file")) {
+            nextSearchParams.delete("file");
+            router.replace(`${pathname}?${nextSearchParams}`);
         }
     });
-    const maxWidth = "98vw";
+    const maxWidth = 98;
+    const maxHeight = "59vh";
     const codeTabs = props.files.map((x, ind) => (
         <SyntaxHighlighter
             key={ind}
-            customStyle={{ maxWidth: "98vw", maxHeight: "60vh" }}
+            customStyle={{ maxWidth: maxWidth + "vw", maxHeight: maxHeight }}
             language="renpy"
             style={darkModeTheme ? darkTheme : lightTheme}
             showLineNumbers={true}
@@ -283,40 +296,57 @@ function ViewCodePlace(props: { files: (typeof renpyfilesTable.$inferSelect)[] }
     ));
     return (
         <>
-            <div
-                className="tab mb-1 overflow-x-auto overflow-y-hidden pt-1 pb-1"
-                style={{ scrollbarWidth: "none", maxWidth: maxWidth }}
-                onWheel={(e) => {
-                    if (e.deltaY) {
-                        e.currentTarget.scrollLeft += e.deltaY;
-                    }
-                }}
-            >
-                {props.files.map((x, ind) =>
-                    x.cdate == -1 ? (
-                        ""
-                    ) : (
-                        <span
-                            key={ind}
-                            className={
-                                "p-1 mr-1 text-xl border-2 rounded-lg " +
-                                (ind == currentTab
-                                    ? "text-[var(--forground-buttons)] border-[var(--forground-buttons)] pointer-events-none"
-                                    : "hover")
-                            }
-                            title={currentTab == ind ? "" : `Switch to file ${x.filename}`}
-                        >
+            <div className="flex " style={{ maxWidth: maxWidth + "vw" }}>
+                <div
+                    className="tab mb-1 overflow-x-auto overflow-y-hidden pt-1 pb-1"
+                    style={{ scrollbarWidth: "none" }}
+                    onWheel={(e) => {
+                        if (e.deltaY) {
+                            e.currentTarget.scrollLeft += e.deltaY;
+                        }
+                    }}
+                >
+                    {props.files.map((x, ind) =>
+                        x.cdate == -1 ? (
+                            ""
+                        ) : (
                             <span
-                                className={"tablinks" + (currentTab == ind ? "" : " ")}
-                                onClick={() => {
-                                    setCurrentTab(ind);
-                                }}
+                                key={ind}
+                                className={
+                                    "p-1 mr-1 text-xl border-2 rounded-lg " +
+                                    (ind == currentTab
+                                        ? "text-[var(--forground-buttons)] border-[var(--forground-buttons)] pointer-events-none"
+                                        : "hover")
+                                }
+                                title={currentTab == ind ? "" : `Switch to file ${x.filename}`}
                             >
-                                {x.filename}
+                                <span
+                                    className={"tablinks" + (currentTab == ind ? "" : " ")}
+                                    onClick={() => {
+                                        setCurrentTab(ind);
+                                    }}
+                                >
+                                    {x.filename}
+                                </span>
                             </span>
-                        </span>
-                    )
-                )}
+                        )
+                    )}
+                </div>
+                <div
+                    className="tab overflow-x-auto overflow-y-hidden pt-1 pb-1 min-w-fit"
+                    style={{ scrollbarWidth: "none" }}
+                >
+                    <span className={"p-1 text-xl border-2 rounded-lg border-[var(--forground-buttons2)] hover"}>
+                        <Image
+                            className="inline-block align-text-top downloadButton"
+                            src="/download.svg"
+                            alt="Qustion Mark"
+                            width={20}
+                            height={20}
+                            title="Download this files from this snippet."
+                        />
+                    </span>
+                </div>
             </div>
             <div id="codediv">
                 {props.files.map((x, ind) => (ind == currentTab ? <div key={ind}>{codeTabs[ind]}</div> : ""))}

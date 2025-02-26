@@ -89,6 +89,10 @@ body {
   border-color: var(--layout-bar-back);
 }
 
+img.downloadButton {
+  filter: invert(47%) sepia(10%) saturate(2762%) hue-rotate(6deg) brightness(97%) contrast(72%);
+}
+
 
 
 

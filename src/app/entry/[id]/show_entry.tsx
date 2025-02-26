@@ -1,5 +1,7 @@
 "use client";
 
+import { deleteSnippet } from "@/app/api";
+import { DeleteButton } from "@/app/components/DeleteButton";
 import CodePlace from "@/app/components/fileViewer";
 import { renpyfilesTable, renpyTable } from "@/db/schema";
 import Link from "next/link";
@@ -8,6 +10,7 @@ import { useState } from "react";
 export default function EntryView(props: {
     entry: (typeof renpyTable.$inferSelect)[];
     entry_files: (typeof renpyfilesTable.$inferSelect)[];
+    userId?: string;
 }) {
     const entry = props.entry[0];
     const dateToUse = entry ? (entry.cdate == entry.mdate ? entry.cdate : entry.mdate) : "";
@@ -74,6 +77,17 @@ export default function EntryView(props: {
             </div>
 
             <CodePlace files={props.entry_files}></CodePlace>
+            {props.userId != entry.cookie_id ? "" : <form
+                    action={deleteSnippet}
+                    className="text-xl text-[var(--forground-buttons2)]"
+                >
+                        <Link href={"/entry/edit/" + entry.id} title="Edit snippet">
+                            Edit
+                        </Link>
+                        <DeleteButton />
+                        <input type="hidden" value={entry.id} name="id" id="id"></input>
+                        <input type="hidden" value="browse" name="currentPage" id="currentPage"></input>
+                </form>}
         </div>
     );
 }
