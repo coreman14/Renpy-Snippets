@@ -7,7 +7,7 @@ import { useState } from "react";
 import { getTimeString } from "./snippetDisplayFunction";
 import { DeleteButton } from "./DeleteButton";
 
-export default function ListOfSnippets(props: {
+export default function ListView(props: {
     itemsToDisplay: browseAdvancedSearchSingle[];
     showOnlyUserEntries?: boolean;
     userId?: string | undefined;

@@ -1,6 +1,6 @@
 'use client'
 import { browseAdvancedSearchSingle } from "@/db/schema";
-import ListOfSnippets from "./components/ListOfSnippets";
+import ListView from "./components/ListView";
 import GridView from "./components/GridView";
 import Link from "next/link";
 import ViewSelector, { ViewType } from "./components/ViewSelector";
@@ -39,7 +39,7 @@ export default function MostRecent(props: {
             </div>
             <div>
                 {currentView === "list" ? (
-                    <ListOfSnippets itemsToDisplay={entries} showOnlyUserEntries={false} userId={props.userId} />
+                    <ListView itemsToDisplay={entries} showOnlyUserEntries={false} userId={props.userId} />
                 ) : (
                     <GridView itemsToDisplay={entries} showOnlyUserEntries={false} userId={props.userId} />
                 )}

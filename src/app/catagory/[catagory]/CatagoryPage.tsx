@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { browseAdvancedSearchSingle } from "@/db/schema";
 
-import ListOfSnippets from "../../components/ListOfSnippets";
+import ListView from "../../components/ListView";
 import { Nunito_Sans } from "next/font/google";
 import React from "react";
 import ViewSelector, { ViewType } from "../../components/ViewSelector";
@@ -89,7 +89,7 @@ export default function CatagoryPage(props: {
             <br />
             <div>
                 {currentView === "list" ? (
-                    <ListOfSnippets
+                    <ListView
                         itemsToDisplay={sortedArray}
                         showOnlyUserEntries={userEntries}
                         userId={props.userId}

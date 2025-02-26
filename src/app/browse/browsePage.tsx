@@ -2,13 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { browseAdvancedSearchSingle } from "@/db/schema";
-import ListOfSnippets from "../components/ListOfSnippets";
 import { Nunito_Sans } from "next/font/google";
 import React from "react";
 import ViewSelector, { ViewType } from "../components/ViewSelector";
 import { getStoredViewPreference, setStoredViewPreference } from "../utils/storage";
-import GridView from "../components/GridView";
 import { getSortFunction, sortOptions, useRefDimensions } from "../utils/browseUtils";
+import ListView from "../components/ListView";
+import GridView from "../components/GridView";
 
 const roboto = Nunito_Sans({ weight: "500", subsets: ["latin"] });
 
@@ -85,7 +85,7 @@ export default function BrowsePage(props: { userId: string | undefined; pageEntr
             <br />
             <div>
                 {currentView === "list" ? (
-                    <ListOfSnippets
+                    <ListView
                         itemsToDisplay={sortedArray}
                         showOnlyUserEntries={userEntries}
                         userId={props.userId}
