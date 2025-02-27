@@ -9,6 +9,7 @@ import { darcula as darkTheme, nnfx as lightTheme } from "react-syntax-highlight
 import renpy from "react-syntax-highlighter/dist/esm/languages/hljs/python";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
+
 SyntaxHighlighter.registerLanguage("renpy", renpy);
 
 export default function CodePlace(props: {
@@ -264,6 +265,7 @@ function EditCodePlace(props: {
 }
 
 function ViewCodePlace(props: { files: (typeof renpyfilesTable.$inferSelect)[] }) {
+    const snippetId = props.files[0].snippet_id
     const searchParams = useSearchParams();
     const router = useRouter();
     const pathname = usePathname();
@@ -336,7 +338,7 @@ function ViewCodePlace(props: { files: (typeof renpyfilesTable.$inferSelect)[] }
                     className="tab overflow-x-auto overflow-y-hidden pt-1 pb-1 min-w-fit"
                     style={{ scrollbarWidth: "none" }}
                 >
-                    <span className={"p-1 text-xl border-2 rounded-lg border-[var(--forground-buttons2)] hover"}>
+                    <a className={"p-1 text-xl border-2 rounded-lg border-[var(--forground-buttons2)] hover"} href={"/entry/download/" + snippetId}>
                         <Image
                             className="inline-block align-text-top downloadButton"
                             src="/download.svg"
@@ -345,7 +347,7 @@ function ViewCodePlace(props: { files: (typeof renpyfilesTable.$inferSelect)[] }
                             height={20}
                             title="Download this files from this snippet."
                         />
-                    </span>
+                    </a>
                 </div>
             </div>
             <div id="codediv">

@@ -11,7 +11,7 @@
 - [X] Add grid view for Recent and Browse
 - [X] Additional pages: Author page (By clicking on the author name you can go to a page that only has that authors snips), Category page (Same thing as the author)
 - [X] Add user should be able to start an edit of the snippet from the view page
-- [ ] Add download button that gives the project back as proper files in a zip
+- [X] Add download button that gives the project back as proper files in a zip
 - [X] Style the add button on the create/edit page to the same as the download button
 - [ ] Fix Readme
 
