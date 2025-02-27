@@ -168,7 +168,7 @@ function EditCodePlace(props: {
                             <span
                                 key={ind}
                                 className={
-                                    "tablinks p-1 mr-1 text-xl border-2 rounded-lg " +
+                                    "tablinks p-1 mr-1 text-xl border-2 rounded-lg whitespace-nowrap " +
                                     (ind == currentTab
                                         ? "text-[var(--forground-buttons)] border-[var(--forground-buttons)] "
                                         : "")
@@ -300,9 +300,10 @@ function ViewCodePlace(props: { files: (typeof renpyfilesTable.$inferSelect)[] }
         <>
             <div className="flex " style={{ maxWidth: maxWidth + "vw" }}>
                 <div
-                    className="tab mb-1 overflow-x-auto overflow-y-hidden pt-1 pb-1  w-full"
+                    className="tab mb-1 overflow-x-auto overflow-y-hidden pt-1 pb-1 w-full whitespace-nowrap"
                     style={{ scrollbarWidth: "none" }}
                     onWheel={(e) => {
+                        e.stopPropagation();
                         if (e.deltaY) {
                             e.currentTarget.scrollLeft += e.deltaY;
                         }

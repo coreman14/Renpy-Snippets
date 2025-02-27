@@ -13,12 +13,13 @@
 - [X] Add user should be able to start an edit of the snippet from the view page
 - [X] Add download button that gives the project back as proper files in a zip
 - [X] Style the add button on the create/edit page to the same as the download button
+- [X] Docker file
+- [ ] Favicon
+- [ ] If user gives an author name, save it in local storage and autofill the create page
 - [ ] Fix Readme
 
-## Future possible upgrades
+## To-do List
 - [ ] Add import button. It takes a zip folder and adds every RPY it could find to the project.
 - [ ] Populate a filter tab that loads all tags/categories/authors, the works
-- [ ] Add some sort of suspense/loading state to the edit/create form and the delete button
-- [ ] If user gives an author name, save it in local storage and autofill the create page
 - [ ] Add Discord embed. I don't know how they work, but it would be cool to have it show all pages
 - [ ] Resource files (Images, music that I will compress to hell and back)
