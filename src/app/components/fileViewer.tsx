@@ -134,7 +134,7 @@ function EditCodePlace(props: {
         <>
             <div className="flex max-w-full">
                 <div
-                    className="tab mb-1 overflow-x-auto overflow-y-hidden pt-1 pb-1 flex"
+                    className="tab mb-1 overflow-x-auto overflow-y-hidden pt-1 pb-1 flex w-full"
                     style={{ scrollbarWidth: "none" }}
                     onWheel={(e) => {
                         if (e.deltaY) {
@@ -300,7 +300,7 @@ function ViewCodePlace(props: { files: (typeof renpyfilesTable.$inferSelect)[] }
         <>
             <div className="flex " style={{ maxWidth: maxWidth + "vw" }}>
                 <div
-                    className="tab mb-1 overflow-x-auto overflow-y-hidden pt-1 pb-1"
+                    className="tab mb-1 overflow-x-auto overflow-y-hidden pt-1 pb-1  w-full"
                     style={{ scrollbarWidth: "none" }}
                     onWheel={(e) => {
                         if (e.deltaY) {
