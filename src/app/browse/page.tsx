@@ -1,7 +1,7 @@
 import { browseAdvancedSearch } from "@/db/schema";
 import { cookies } from 'next/headers'
 import BrowsePage from "./browsePage";
-
+export const dynamic = 'force-dynamic'
 export default async function BrowsePageServer({
   searchParams,
 }: {

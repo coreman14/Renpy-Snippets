@@ -2,7 +2,7 @@ import { browseAdvancedSearch, renpyTable } from "@/db/schema";
 import { cookies } from 'next/headers'
 import { desc } from "drizzle-orm";
 import MostRecent from "./mostRecentList";
-
+export const dynamic = 'force-dynamic'
 export default async function HomePage() {
 
     const data = await browseAdvancedSearch("", desc(renpyTable.cdate));
