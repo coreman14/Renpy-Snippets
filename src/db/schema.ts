@@ -2,7 +2,13 @@ import "dotenv/config";
 import { or, relations, like, SQL, desc, eq, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/libsql";
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
-export const db = drizzle(process.env.DB_FILE_NAME!);
+export const db = drizzle(process.env.AUTH_TOKEN! ? {
+    //@ts-expect-error This works, and allows use to allow for both local and remote
+    connection: {
+        url: process.env.DB_FILE_NAME!,
+        authToken: process.env.AUTH_TOKEN!
+    },
+} : process.env.DB_FILE_NAME!);
 
 export const renpyTable = sqliteTable("renpy_snippet", {
     id: int().primaryKey({ autoIncrement: true }),
@@ -93,7 +99,7 @@ export const browseSimpleSearch = async function (filterString: string, orderBy:
         .orderBy(orderBy);
 };
 
-function getResultsAsArray(rows: browseAdvancedSearchSingleFile[]){
+function getResultsAsArray(rows: browseAdvancedSearchSingleFile[]) {
     const id_order = new Set(rows.map((x) => x.snippet.id));
     const resultArray: browseAdvancedSearchSingle[] = [];
     const result = rows.reduce<browseAdvancedSearchResult>((acc, row) => {
@@ -151,7 +157,7 @@ export const authorAdvancedSearch = async function (author: string, orderBy: SQL
         .where(sql`lower(${renpyTable.author}) = ${author.toLowerCase()}`)
         .orderBy(orderBy)
         .all();
-        return getResultsAsArray(rows);
+    return getResultsAsArray(rows);
 };
 export const catagoryAdvancedSearch = async function (catagory: string, orderBy: SQL | null = null) {
     if (!orderBy) {
@@ -168,5 +174,5 @@ export const catagoryAdvancedSearch = async function (catagory: string, orderBy:
         .where(sql`lower(${renpyTable.catagory}) = ${catagory.toLowerCase()}`)
         .orderBy(orderBy)
         .all();
-        return getResultsAsArray(rows);
+    return getResultsAsArray(rows);
 };

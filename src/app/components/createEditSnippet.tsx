@@ -1,7 +1,7 @@
 "use client";
 // import SyntaxHighligher from "react-syntax-highlighter"
 // import { agate as dracula } from 'react-syntax-highlighter/dist/esm/styles/hljs'
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { renpyfilesTable, renpyTable } from "@/db/schema";
 import { useFormStatus } from "react-dom";
 import CodePlace from "./fileViewer";
@@ -30,6 +30,12 @@ export default function CreateOrEditSnippet(props: {
         }
     };
     const updateUserStroage = () => {localStorage.setItem("authorName", authorRef.current?.value || "")}
+
+    useEffect(() => {
+        if (authorRef.current) {
+            authorRef.current.value = props.entry?.author || (localStorage.getItem("authorName") ? localStorage.getItem("authorName") || "": "")
+        }
+    })
     return (
         <form action={formActionWithFiles} id="createViewForm">
             <input type="hidden" name="id" id="id" value={props.entry?.id}></input>
@@ -56,7 +62,7 @@ export default function CreateOrEditSnippet(props: {
                     type="text"
                     name="author"
                     id="author"
-                    defaultValue={props.entry?.author || (localStorage.getItem("authorName") ? localStorage.getItem("authorName") || "": "")}
+                    defaultValue={props.entry?.author || ""}
                     ref={authorRef}
                 ></input>
 
