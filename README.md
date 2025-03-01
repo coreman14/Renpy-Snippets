@@ -17,7 +17,7 @@ A self-hosted Pastebin, that focuses on the Renpy language and adding multiple f
 The goal of this project was to include Pastebin's ease of use features, such as anonymous posting and not requiring an account to use the majority of the web UI, while adding features that are important in Renpy, such as multiple files per snippet and automatic indenting features to make writing feel like using an editor, and designed to make finding what you're looking as simple as possible, with each snippet having a description, category and additional tags.
 
 # Deploying
-This app can be deployed by cloning this repo, running Next.js locally or using the Dockerfile. In either case, an environment variable `DB_FILE_NAME` must be present, which point drizzle to the DB. If another environment value named `AUTH_TOKEN` is present, it will assume that the connection is a remote connection.
+This app can be deployed by cloning this repo, running Next.js locally or using the Dockerfile, which broadcasts on port 3000. In either case, an environment variable `DB_FILE_NAME` must be present, which point drizzle to the DB. If another environment value named `AUTH_TOKEN` is present, it will assume that the connection is a remote connection.
 
 ```dosini
 #For local database
