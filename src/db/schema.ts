@@ -10,6 +10,7 @@ export const db = drizzle(process.env.AUTH_TOKEN! ? {
     },
 } : process.env.DB_FILE_NAME!);
 
+
 export const renpyTable = sqliteTable("renpy_snippet", {
     id: int().primaryKey({ autoIncrement: true }),
     title: text().notNull(),
@@ -172,6 +173,23 @@ export const catagoryAdvancedSearch = async function (catagory: string, orderBy:
         .from(renpyTable)
         .leftJoin(renpyfilesTable, eq(renpyTable.id, renpyfilesTable.snippet_id))
         .where(sql`lower(${renpyTable.catagory}) = ${catagory.toLowerCase()}`)
+        .orderBy(orderBy)
+        .all();
+    return getResultsAsArray(rows);
+};
+export const tagAdvancedSearch = async function (tag: string, orderBy: SQL | null = null) {
+    if (!orderBy) {
+        orderBy = desc(renpyTable.mdate);
+    }
+    tag = `%${tag.toLowerCase()}%`
+    const rows = await db
+        .select({
+            snippet: renpyTable,
+            files: renpyfilesTable,
+        })
+        .from(renpyTable)
+        .leftJoin(renpyfilesTable, eq(renpyTable.id, renpyfilesTable.snippet_id))
+        .where(sql`lower(${renpyTable.tags}) like ${tag}`)
         .orderBy(orderBy)
         .all();
     return getResultsAsArray(rows);

@@ -71,7 +71,20 @@ export default function EntryView(props: {
                         "Anonymous"
                     )}
                 </h1>
-                <h1>Addtional Tags: {entry.tags || "None"}</h1>
+                <h1>Addtional Tags: {entry.tags ? (entry.tags.split(",").map((x, ind) => 
+                        <span key={x}>
+                            <Link
+                                className="text-[var(--forground-buttons2)]"
+                                href={`/tag/${encodeURIComponent(x)}`}
+                                title={"See snippets with tag " + x}
+                            >
+                                {" "}{x.trim()}
+                            </Link>
+                            {entry.tags?.split(",").length != ind + 1 ? "," : ""}
+                        </span>
+                    )) : (
+                        "None"
+                    )}</h1>
                 <h1 className="pt-2 text-xl text-[var(--layout-bar-selected)]">Description</h1>
                 <h1 className="pb-2">{entry.description || "No description Given"}</h1>
             </div>
