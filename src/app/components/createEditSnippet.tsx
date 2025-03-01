@@ -1,7 +1,7 @@
 "use client";
 // import SyntaxHighligher from "react-syntax-highlighter"
 // import { agate as dracula } from 'react-syntax-highlighter/dist/esm/styles/hljs'
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { renpyfilesTable, renpyTable } from "@/db/schema";
 import { useFormStatus } from "react-dom";
 import CodePlace from "./fileViewer";
@@ -18,6 +18,7 @@ export default function CreateOrEditSnippet(props: {
 }) {
     const [files, setFiles] = useState(props.entry_files);
     const [descriptionErrorMessage, setDescriptionErrorMessage] = useState(blankLine);
+    const authorRef = useRef<HTMLInputElement>(null);
     const formActionWithFiles = props.form_action.bind(null, files);
     const descriptionUpdate = function (x: HTMLTextAreaElement) {
         if (x.value.length > maxDescriptionLength) {
@@ -28,6 +29,7 @@ export default function CreateOrEditSnippet(props: {
             setDescriptionErrorMessage(blankLine);
         }
     };
+    const updateUserStroage = () => {localStorage.setItem("authorName", authorRef.current?.value || "")}
     return (
         <form action={formActionWithFiles} id="createViewForm">
             <input type="hidden" name="id" id="id" value={props.entry?.id}></input>
@@ -54,7 +56,8 @@ export default function CreateOrEditSnippet(props: {
                     type="text"
                     name="author"
                     id="author"
-                    defaultValue={props.entry?.author || ""}
+                    defaultValue={props.entry?.author || (localStorage.getItem("authorName") ? localStorage.getItem("authorName") || "": "")}
+                    ref={authorRef}
                 ></input>
 
                 <label htmlFor="catagory">Catagory</label>
@@ -100,12 +103,12 @@ export default function CreateOrEditSnippet(props: {
             </div>
             <div className="text-red-500 text-2xl translate-x-[10.2rem] pb-1 max-w-fit">{descriptionErrorMessage}</div>
             <CodePlace files={files} setFiles={setFiles}></CodePlace>
-            <SubmitButton editMode={props.editing} disable={descriptionErrorMessage != blankLine} />
+            <SubmitButton editMode={props.editing} disable={descriptionErrorMessage != blankLine} beforeSubmit={updateUserStroage}/>
         </form>
     );
 }
 
-function SubmitButton(props: { editMode?: boolean; disable?: boolean }) {
+function SubmitButton(props: { editMode?: boolean; disable?: boolean, beforeSubmit?: () => void }) {
     const { pending } = useFormStatus();
     return (
         <button
@@ -118,6 +121,7 @@ function SubmitButton(props: { editMode?: boolean; disable?: boolean }) {
                 (pending || props.disable ? "" : "hover")
             }
             title={pending ? "Uploading" : props.disable ? "Please fix submission before submitting" : "Submit form"}
+            onClick={props.beforeSubmit}
         >
             {pending ? "Uploading" : props.editMode ? "Create" : "Submit Changes"}
         </button>
