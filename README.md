@@ -1,25 +1,33 @@
 ## To-do List
-- [I] Better API validation. Ignoring due to the hole I dug myself in with a single component for 2 form actions + how do you bind it after?
-- [X] Button that makes the current user only able to see their snippets in the browse page
-- [X] Add some comforts to the file text area (Tab should insert up to 4 spaces to match indents + auto space when : at end of line)
-- [X] Search bar.
-- [X] Home page.
-- [X] Add syntax highlighting in view page.
-- [X] Finish CSS on pages. ~~Create/edit, view and top bar of browse page and make layout search nicer~~
-- [X] Add code search. Search bar on browse that specifically searches code files (name and code)
-- [X] Make view/create page able to scroll filenames if too many
-- [X] Add grid view for Recent and Browse
-- [X] Additional pages: Author page (By clicking on the author name you can go to a page that only has that authors snips), Category page (Same thing as the author)
-- [X] Add user should be able to start an edit of the snippet from the view page
-- [X] Add download button that gives the project back as proper files in a zip
-- [X] Style the add button on the create/edit page to the same as the download button
-- [X] Docker file
-- [ ] Favicon
-- [ ] If user gives an author name, save it in local storage and autofill the create page
-- [ ] Fix Readme
-
-## To-do List
-- [ ] Add import button. It takes a zip folder and adds every RPY it could find to the project.
+- [ ] Better Favicon.
+- [ ] Add import zip button. It takes a zip folder and adds every RPY it could find to the project.
 - [ ] Populate a filter tab that loads all tags/categories/authors, the works
 - [ ] Add Discord embed. I don't know how they work, but it would be cool to have it show all pages
 - [ ] Resource files (Images, music that I will compress to hell and back)
+- [ ] Better auth. The auth is currently setup to allow for ease of use rather than data protection.
+- [ ] When switching between large files, react-syntax-highlighter does slow down even if you use the lightweight version. Look into the proper way to do something like this
+- [ ] If the above goes well, add syntax highlighting to creating as well
+
+
+
+# Renpy Snippets
+A self-hosted Pastebin, that focuses on the Renpy language and adding multiple files to share more complex ideas. Built using Next.js, Drizzle with SQLite, and react-syntax-highlighter.
+
+# Goals
+The goal of this project was to include Pastebin's ease of use features, such as anonymous posting and not requiring an account to use the majority of the web UI, while adding features that are important in Renpy, such as multiple files per snippet and automatic indenting features to make writing feel like using an editor, and designed to make finding what you're looking as simple as possible, with each snippet having a description, category and additional tags.
+
+# Deploying
+This app can be deployed by cloning this repo, running Next.js locally or using the Dockerfile. In either case, an environment variable `DB_FILE_NAME` must be present, which point drizzle to the DB. If another environment value named `AUTH_TOKEN` is present, it will assume that the connection is a remote connection.
+
+```dosini
+#For local database
+DB_FILE_NAME=file:local.db
+
+#For remote connections
+DB_FILE_NAME=<DATABASE_URL>
+DB_FILE_NAME=<AUTH_TOKEN>
+```
+
+If you choose to use a file database with docker, make sure you set up a volume so that the information is saved on a hard drive.
+
+
