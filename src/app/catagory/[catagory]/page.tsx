@@ -11,7 +11,7 @@ export default async function CatagoryPageServer(props: { params: Promise<{ cata
       return (word[0]?.toUpperCase() || " ") + word.substring(1);
     }).join(" ");
     const userId = (await cookies()).get("userId")?.value;
-    return <BaseBrowsePage userId={userId} pageEntries={data} title={"&quot;" + params.catagory + "&quot; Snippets"}/>;
+    return <BaseBrowsePage userId={userId} pageEntries={data} title={'"' + catagoryName + '" Snippets'}/>;
 }
 /*
 

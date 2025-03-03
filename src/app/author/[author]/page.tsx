@@ -9,7 +9,7 @@ export default async function AuthorPageServer(props: { params: Promise<{ author
     const data = await authorAdvancedSearch(authorName);
 
     const userId = (await cookies()).get("userId")?.value;
-    return <BaseBrowsePage userId={userId} pageEntries={data} title={"Snippets from &quot;" + params.author + "&quot;"} />;
+    return <BaseBrowsePage userId={userId} pageEntries={data} title={'Snippets from "' + authorName + '"'} />;
 }
 /*
 

@@ -11,7 +11,7 @@ export default async function TagPageServer(props: { params: Promise<{ tag: stri
       return (word[0]?.toUpperCase() || " ") + word.substring(1); 
     }).join(" ");
     const userId = (await cookies()).get("userId")?.value;
-    return <BaseBrowsePage userId={userId} pageEntries={data} title={"Snippets tagged &quot;" + params.tag + "&quot;"} />;
+    return <BaseBrowsePage userId={userId} pageEntries={data} title={'Snippets tagged "' + tagName + '"'} />;
 }
 /*
 
