@@ -27,7 +27,7 @@ export default function SearchBar() {
                     } else if (
                         e.key.includes("Enter") &&
                         e.currentTarget.value == "" &&
-                        searchParams.has("searchTerm")
+                        (searchParams.has("searchTerm") || searchParams.has("searchCode"))
                     ) {
                         redirect("/browse");
                     }

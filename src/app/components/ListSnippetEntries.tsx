@@ -94,7 +94,7 @@ export default function BaseBrowsePage(props: { userId: string | undefined; page
             </div>
             <br />
             <div>
-                {currentView === "list" ? (
+                {(currentPageData.length == 0 && <h1 className="text-2xl text-[var(--layout-bar-selected)]">No Snippets found</h1>) ||  (currentView === "list" ? (
                     <ListView
                         itemsToDisplay={currentPageData}
                         showOnlyUserEntries={userEntries}
@@ -108,7 +108,7 @@ export default function BaseBrowsePage(props: { userId: string | undefined; page
                         userId={props.userId}
                         showEditedTime={true}
                     />
-                )}
+                ))}
             </div>
             <div className="flex flex-row gap-4 justify-between items-center mt-4" ref={paginationRef}>
                 <div>
