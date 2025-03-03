@@ -5,7 +5,6 @@ import BaseBrowsePage from "@/app/components/ListEntries";
 export default async function AuthorPageServer(props: { params: Promise<{ author: string }> }) {
     const params = await props.params;
     const authorName = decodeURIComponent(params.author);
-    // const data = await browseSimpleSearch(typeof searchString === "string" ? searchString : searchString[0]);
     const data = await authorAdvancedSearch(authorName);
 
     const userId = (await cookies()).get("userId")?.value;

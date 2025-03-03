@@ -1,5 +1,5 @@
 "use client";
-import { browseAdvancedSearchSingle } from "@/db/schema";
+import { browseAdvancedSearchGrouped } from "@/db/schema";
 import Link from "next/link";
 import { deleteSnippet } from "../api";
 import { useSearchParams } from "next/navigation";
@@ -8,7 +8,7 @@ import { getTimeString } from "./snippetDisplayFunction";
 import { DeleteButton } from "./DeleteButton";
 
 export default function ListView(props: {
-    itemsToDisplay: browseAdvancedSearchSingle[];
+    itemsToDisplay: browseAdvancedSearchGrouped[];
     showOnlyUserEntries?: boolean;
     userId?: string | undefined;
     showEditedTime?: boolean;

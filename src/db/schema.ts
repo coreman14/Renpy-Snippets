@@ -1,15 +1,18 @@
 import "dotenv/config";
-import { or, relations, like, SQL, desc, eq, sql, count, and, inArray } from "drizzle-orm";
+import { or, relations, like, desc, eq, sql, count, and, inArray } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/libsql";
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
-export const db = drizzle(process.env.AUTH_TOKEN! ? {
-    //@ts-expect-error This works, and allows use to allow for both local and remote
-    connection: {
-        url: process.env.DB_FILE_NAME!,
-        authToken: process.env.AUTH_TOKEN!
-    },
-} : process.env.DB_FILE_NAME!);
-
+export const db = drizzle(
+    process.env.AUTH_TOKEN!
+        ? {
+              //@ts-expect-error This works, and allows use to allow for both local and remote
+              connection: {
+                  url: process.env.DB_FILE_NAME!,
+                  authToken: process.env.AUTH_TOKEN!,
+              },
+          }
+        : process.env.DB_FILE_NAME!
+);
 
 export const renpyTable = sqliteTable("renpy_snippet", {
     id: int().primaryKey({ autoIncrement: true }),
@@ -64,42 +67,19 @@ export const renpyFileDefaultNewFile: DB_renpyFileTable = {
 };
 
 // result type
-export type browseAdvancedSearchResult = Record<
-    number,
-    browseAdvancedSearchSingle
->;
-export type browseAdvancedSearchSingle = {
+export type browseAdvancedSearchResult = Record<number, browseAdvancedSearchGrouped>;
+export type browseAdvancedSearchGrouped = {
     snippet: DB_renpyTable;
     filenames: string[];
 };
-export type browseAdvancedSearchSingleFile = {
+export type browseAdvancedSearchSingle = {
     snippet: DB_renpyTable;
     filename: string | null;
 };
 
-export const browseSimpleSearch = async function (filterString: string, orderBy: SQL | null = null) {
-    if (!orderBy) {
-        orderBy = desc(renpyTable.mdate);
-    }
-    filterString = `%${filterString}%`;
-    return await db
-        .select()
-        .from(renpyTable)
-        .where(
-            or(
-                like(renpyTable.title, filterString),
-                like(renpyTable.author, filterString),
-                like(renpyTable.tags, filterString),
-                like(renpyTable.description, filterString),
-                like(renpyTable.catagory, filterString)
-            )
-        )
-        .orderBy(orderBy);
-};
-
-function getResultsAsArray(rows: browseAdvancedSearchSingleFile[]) {
+function getResultsAsArray(rows: browseAdvancedSearchSingle[]) {
     const id_order = new Set(rows.map((x) => x.snippet.id));
-    const resultArray: browseAdvancedSearchSingle[] = [];
+    const resultArray: browseAdvancedSearchGrouped[] = [];
     const result = rows.reduce<browseAdvancedSearchResult>((acc, row) => {
         const snippet = row.snippet;
         const filename = row.filename;
@@ -116,16 +96,12 @@ function getResultsAsArray(rows: browseAdvancedSearchSingleFile[]) {
 }
 
 export const numberOfSnippets = async () => {
-    return await db.select({ value: count()}).from(renpyTable)
-}
+    return await db.select({ value: count() }).from(renpyTable);
+};
 
-export const browseAdvancedSearch = async function (filterString: string, orderBy: SQL | null = null, pageSize: number = 50, page: number = 1) {
-    if (!orderBy) {
-        orderBy = desc(renpyTable.mdate);
-    }
-    filterString = `%${filterString}%`;
-    const ids = await db.select({id: renpyTable.id}).from(renpyTable).limit(pageSize)
-    .offset((page) * pageSize);
+export const homePageResults = async function () {
+    //Do pagination on the Id's themselves, not the table join
+    const ids = await db.select({ id: renpyTable.id }).from(renpyTable).orderBy(desc(renpyTable.cdate)).limit(6);
     const rows = await db
         .select({
             snippet: renpyTable,
@@ -134,41 +110,52 @@ export const browseAdvancedSearch = async function (filterString: string, orderB
         .from(renpyTable)
         .leftJoin(renpyfilesTable, eq(renpyTable.id, renpyfilesTable.snippet_id))
         .where(
-            and(inArray(renpyTable.id, ids.map((x) => x.id)),
+            inArray(
+                renpyTable.id,
+                ids.map((x) => x.id)
+            )
+        )
+        .orderBy(desc(renpyTable.cdate));
+    return getResultsAsArray(rows);
+};
+
+export const browseAdvancedSearch = async function (filterString: string) {
+    filterString = `%${filterString}%`;
+    const ids = await db
+        .select({ id: renpyTable.id })
+        .from(renpyTable)
+        .where(
             or(
                 like(renpyTable.title, filterString),
                 like(renpyTable.author, filterString),
                 like(renpyTable.tags, filterString),
                 like(renpyTable.description, filterString),
                 like(renpyTable.catagory, filterString)
-            ),
+            )
+        );
+    const rows = await db
+        .select({
+            snippet: renpyTable,
+            filename: renpyfilesTable.filename,
+        })
+        .from(renpyTable)
+        .leftJoin(renpyfilesTable, eq(renpyTable.id, renpyfilesTable.snippet_id))
+        .where(
+            and(
+                inArray(
+                    renpyTable.id,
+                    ids.map((x) => x.id)
+                )
             )
         )
-        .orderBy(orderBy);
-    return getResultsAsArray(rows);
-};
-export const authorAdvancedSearch = async function (author: string, orderBy: SQL | null = null) {
-    if (!orderBy) {
-        orderBy = desc(renpyTable.mdate);
-    }
-
-    const rows = await db
-        .select({
-            snippet: renpyTable,
-            filename: renpyfilesTable.filename,
-        })
-        .from(renpyTable)
-        .leftJoin(renpyfilesTable, eq(renpyTable.id, renpyfilesTable.snippet_id))
-        .where(sql`lower(${renpyTable.author}) = ${author.toLowerCase()}`)
-        .orderBy(orderBy)
         .all();
     return getResultsAsArray(rows);
 };
-export const catagoryAdvancedSearch = async function (catagory: string, orderBy: SQL | null = null) {
-    if (!orderBy) {
-        orderBy = desc(renpyTable.mdate);
-    }
-
+export const authorAdvancedSearch = async function (author: string) {
+    const ids = await db
+        .select({ id: renpyTable.id })
+        .from(renpyTable)
+        .where(sql`lower(${renpyTable.author}) = ${author.toLowerCase()}`);
     const rows = await db
         .select({
             snippet: renpyTable,
@@ -176,16 +163,21 @@ export const catagoryAdvancedSearch = async function (catagory: string, orderBy:
         })
         .from(renpyTable)
         .leftJoin(renpyfilesTable, eq(renpyTable.id, renpyfilesTable.snippet_id))
-        .where(sql`lower(${renpyTable.catagory}) = ${catagory.toLowerCase()}`)
-        .orderBy(orderBy)
+        .where(
+            inArray(
+                renpyTable.id,
+                ids.map((x) => x.id)
+            )
+        )
         .all();
     return getResultsAsArray(rows);
 };
-export const tagAdvancedSearch = async function (tag: string, orderBy: SQL | null = null) {
-    if (!orderBy) {
-        orderBy = desc(renpyTable.mdate);
-    }
-    tag = `%${tag.toLowerCase()}%`
+export const catagoryAdvancedSearch = async function (catagory: string) {
+    //Do pagination on the Id's themselves, not the table join
+    const ids = await db
+        .select({ id: renpyTable.id })
+        .from(renpyTable)
+        .where(sql`lower(${renpyTable.catagory}) = ${catagory.toLowerCase()}`);
     const rows = await db
         .select({
             snippet: renpyTable,
@@ -193,8 +185,35 @@ export const tagAdvancedSearch = async function (tag: string, orderBy: SQL | nul
         })
         .from(renpyTable)
         .leftJoin(renpyfilesTable, eq(renpyTable.id, renpyfilesTable.snippet_id))
-        .where(sql`lower(${renpyTable.tags}) like ${tag}`)
-        .orderBy(orderBy)
+        .where(
+            inArray(
+                renpyTable.id,
+                ids.map((x) => x.id)
+            )
+        )
+        .all();
+    return getResultsAsArray(rows);
+};
+export const tagAdvancedSearch = async function (tag: string) {
+    tag = `%${tag.toLowerCase()}%`;
+    //Do pagination on the Id's themselves, not the table join
+    const ids = await db
+        .select({ id: renpyTable.id })
+        .from(renpyTable)
+        .where(sql`lower(${renpyTable.tags}) like ${tag}`);
+    const rows = await db
+        .select({
+            snippet: renpyTable,
+            filename: renpyfilesTable.filename,
+        })
+        .from(renpyTable)
+        .leftJoin(renpyfilesTable, eq(renpyTable.id, renpyfilesTable.snippet_id))
+        .where(
+            inArray(
+                renpyTable.id,
+                ids.map((x) => x.id)
+            )
+        )
         .all();
     return getResultsAsArray(rows);
 };

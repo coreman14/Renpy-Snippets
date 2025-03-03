@@ -1,5 +1,5 @@
 'use client'
-import { browseAdvancedSearchSingle } from "@/db/schema";
+import { browseAdvancedSearchGrouped } from "@/db/schema";
 import { ListView, GridView } from "./utils/browseUtils";
 import Link from "next/link";
 import ViewSelector, { ViewType } from "./components/ViewSelector";
@@ -8,7 +8,7 @@ import { getStoredViewPreference, setStoredViewPreference } from "./utils/storag
 
 export default function MostRecent(props: {
     userId: string | undefined;
-    pageEntries: browseAdvancedSearchSingle[];
+    pageEntries: browseAdvancedSearchGrouped[];
     showMoreSnippets: boolean;
 }) {
 

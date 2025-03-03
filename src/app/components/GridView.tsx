@@ -20,7 +20,7 @@ export default function GridView(props: {
     const [dateOfCall] = useState(new Date().getTime());
     const searchParams = useSearchParams();
     return (
-        <div className="flex flex-wrap gap-6 pb-3 overflow-x-auto">
+        <div className="flex flex-wrap gap-6 pb-3 overflow-x-hidden">
             {props.itemsToDisplay
                 .filter((x) => !props.showOnlyUserEntries || props.userId == x.snippet.cookie_id)
                 .map((x) => (
@@ -34,7 +34,7 @@ export default function GridView(props: {
                             </Link>
                         </div>
 
-                        <div className="text-gray-700 text-sm">
+                        <div className="text-gray-700 text-sm whitespace-nowrap overflow-x-hidden">
                             {x.snippet.author ? (
                                 <>
                                     {"Author: "}
@@ -71,11 +71,8 @@ export default function GridView(props: {
                         </div>
 
                         
-                        <div className="text-[var(--layout-bar-front) mt-2 text-base">
-                            {((x.snippet.description|| "No description given").split("\n")[0].replace(/(.{150})..+/, "$1…") + " ").padEnd(
-                                150,
-                                blankLine
-                            )}
+                        <div className="text-[var(--layout-bar-front) mt-2 text-base line-clamp-3 text-ellipsis h-19">
+                            {(x.snippet.description|| "No description given").split("\n")[0]}
                         </div>
 
 
