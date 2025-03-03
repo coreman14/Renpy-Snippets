@@ -1,6 +1,6 @@
 import { browseAdvancedSearch } from "@/db/schema";
 import { cookies } from 'next/headers'
-import BrowsePage from "./browsePage";
+import BaseBrowsePage from "../components/ListEntries";
 export const dynamic = 'force-dynamic'
 export default async function BrowsePageServer({
   searchParams,
@@ -16,7 +16,7 @@ export default async function BrowsePageServer({
 
 
     const userId = (await cookies()).get("userId")?.value;
-    return <BrowsePage userId={userId} pageEntries={data}/>
+    return <BaseBrowsePage userId={userId} pageEntries={data} title="Browse All"/>
   }
   /*
 

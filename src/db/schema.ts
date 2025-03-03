@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { or, relations, like, SQL, desc, eq, sql } from "drizzle-orm";
+import { or, relations, like, SQL, desc, eq, sql, count, and, inArray } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/libsql";
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 export const db = drizzle(process.env.AUTH_TOKEN! ? {
@@ -66,18 +66,15 @@ export const renpyFileDefaultNewFile: DB_renpyFileTable = {
 // result type
 export type browseAdvancedSearchResult = Record<
     number,
-    {
-        snippet: DB_renpyTable;
-        files: DB_renpyFileTable[];
-    }
+    browseAdvancedSearchSingle
 >;
 export type browseAdvancedSearchSingle = {
     snippet: DB_renpyTable;
-    files: DB_renpyFileTable[];
+    filenames: string[];
 };
 export type browseAdvancedSearchSingleFile = {
     snippet: DB_renpyTable;
-    files: DB_renpyFileTable | null;
+    filename: string | null;
 };
 
 export const browseSimpleSearch = async function (filterString: string, orderBy: SQL | null = null) {
@@ -105,12 +102,12 @@ function getResultsAsArray(rows: browseAdvancedSearchSingleFile[]) {
     const resultArray: browseAdvancedSearchSingle[] = [];
     const result = rows.reduce<browseAdvancedSearchResult>((acc, row) => {
         const snippet = row.snippet;
-        const files = row.files;
+        const filename = row.filename;
         if (!acc[snippet.id]) {
-            acc[snippet.id] = { snippet, files: [] };
+            acc[snippet.id] = { snippet, filenames: [] };
         }
-        if (files) {
-            acc[snippet.id].files.push(files);
+        if (filename) {
+            acc[snippet.id].filenames.push(filename);
         }
         return acc;
     }, {});
@@ -118,29 +115,36 @@ function getResultsAsArray(rows: browseAdvancedSearchSingleFile[]) {
     return resultArray;
 }
 
-export const browseAdvancedSearch = async function (filterString: string, orderBy: SQL | null = null) {
+export const numberOfSnippets = async () => {
+    return await db.select({ value: count()}).from(renpyTable)
+}
+
+export const browseAdvancedSearch = async function (filterString: string, orderBy: SQL | null = null, pageSize: number = 50, page: number = 1) {
     if (!orderBy) {
         orderBy = desc(renpyTable.mdate);
     }
     filterString = `%${filterString}%`;
+    const ids = await db.select({id: renpyTable.id}).from(renpyTable).limit(pageSize)
+    .offset((page) * pageSize);
     const rows = await db
         .select({
             snippet: renpyTable,
-            files: renpyfilesTable,
+            filename: renpyfilesTable.filename,
         })
         .from(renpyTable)
         .leftJoin(renpyfilesTable, eq(renpyTable.id, renpyfilesTable.snippet_id))
         .where(
+            and(inArray(renpyTable.id, ids.map((x) => x.id)),
             or(
                 like(renpyTable.title, filterString),
                 like(renpyTable.author, filterString),
                 like(renpyTable.tags, filterString),
                 like(renpyTable.description, filterString),
                 like(renpyTable.catagory, filterString)
+            ),
             )
         )
-        .orderBy(orderBy)
-        .all();
+        .orderBy(orderBy);
     return getResultsAsArray(rows);
 };
 export const authorAdvancedSearch = async function (author: string, orderBy: SQL | null = null) {
@@ -151,7 +155,7 @@ export const authorAdvancedSearch = async function (author: string, orderBy: SQL
     const rows = await db
         .select({
             snippet: renpyTable,
-            files: renpyfilesTable,
+            filename: renpyfilesTable.filename,
         })
         .from(renpyTable)
         .leftJoin(renpyfilesTable, eq(renpyTable.id, renpyfilesTable.snippet_id))
@@ -168,7 +172,7 @@ export const catagoryAdvancedSearch = async function (catagory: string, orderBy:
     const rows = await db
         .select({
             snippet: renpyTable,
-            files: renpyfilesTable,
+            filename: renpyfilesTable.filename,
         })
         .from(renpyTable)
         .leftJoin(renpyfilesTable, eq(renpyTable.id, renpyfilesTable.snippet_id))
@@ -185,7 +189,7 @@ export const tagAdvancedSearch = async function (tag: string, orderBy: SQL | nul
     const rows = await db
         .select({
             snippet: renpyTable,
-            files: renpyfilesTable,
+            filename: renpyfilesTable.filename,
         })
         .from(renpyTable)
         .leftJoin(renpyfilesTable, eq(renpyTable.id, renpyfilesTable.snippet_id))

@@ -9,9 +9,9 @@ import { getStoredViewPreference, setStoredViewPreference } from "./utils/storag
 export default function MostRecent(props: {
     userId: string | undefined;
     pageEntries: browseAdvancedSearchSingle[];
-    limit?: number;
+    showMoreSnippets: boolean;
 }) {
-    const limit = props.limit || 6;
+
     const [currentView, setCurrentView] = useState<ViewType>('list');
     
     useEffect(() => {
@@ -23,12 +23,6 @@ export default function MostRecent(props: {
         setStoredViewPreference(view);
     };
 
-    let overLimit = false;
-    let entries = props.pageEntries;
-    if (entries.length > limit) {
-        overLimit = true;
-        entries = entries.slice(0, limit)
-    }
 
     return (
         <>
@@ -38,12 +32,12 @@ export default function MostRecent(props: {
             </div>
             <div>
                 {currentView === "list" ? (
-                    <ListView itemsToDisplay={entries} showOnlyUserEntries={false} userId={props.userId} />
+                    <ListView itemsToDisplay={props.pageEntries} showOnlyUserEntries={false} userId={props.userId} />
                 ) : (
-                    <GridView itemsToDisplay={entries} showOnlyUserEntries={false} userId={props.userId} />
+                    <GridView itemsToDisplay={props.pageEntries} showOnlyUserEntries={false} userId={props.userId} />
                 )}
             </div>
-            {overLimit && <Link className="text-xl text-[var(--forground-buttons2)]" href="/browse">See all snippets</Link>}
+            {props.showMoreSnippets && <Link className="text-xl text-[var(--forground-buttons2)]" href="/browse">See all snippets</Link>}
         </>
     );
 }

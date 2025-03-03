@@ -81,25 +81,25 @@ export default function GridView(props: {
 
                         <div className="mt-2 text-sm">
                             <div className="font-bold text-[var(--layout-bar-selected)] text-base">Files:</div>
-                            {x.files.slice(0, maximumFilesToShow).map((file, index) => (
+                            {x.filenames.slice(0, maximumFilesToShow).map((filename, index) => (
                                 <Link
                                     key={index}
                                     href={`/entry/${x.snippet.id}?file=${index + 1}`}
                                     className="block text-[var(--forground-buttons)] hover:underline max-w-fit"
-                                    title={"View file " + file.filename}
+                                    title={"View file " + filename}
                                 >
-                                    {file.filename}
+                                    {filename}
                                 </Link>
                             ))}
-                            {x.files.length <= maximumFilesToShow &&
-                                new Array(maximumFilesToShow).toSpliced(0, x.files.length).map((_, a) => (
+                            {x.filenames.length <= maximumFilesToShow &&
+                                new Array(maximumFilesToShow).toSpliced(0, x.filenames.length).map((_, a) => (
                                     <span key={a} className="emptyListSlot block max-w-fit">
                                         {blankLine}
                                     </span>
                                 ))}
                             <span className="font-bold text-gray-700 emptyMoreFilesSlot block max-w-fit">
-                                {x.files.length > maximumFilesToShow
-                                    ? `+${x.files.length - maximumFilesToShow} more files`
+                                {x.filenames.length > maximumFilesToShow
+                                    ? `+${x.filenames.length - maximumFilesToShow} more files`
                                     : blankLine}
                             </span>
                         </div>

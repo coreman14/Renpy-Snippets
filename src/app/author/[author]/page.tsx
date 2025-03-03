@@ -1,6 +1,6 @@
 import { authorAdvancedSearch } from "@/db/schema";
 import { cookies } from "next/headers";
-import AuthorPage from "./AuthorPage";
+import BaseBrowsePage from "@/app/components/ListEntries";
 
 export default async function AuthorPageServer(props: { params: Promise<{ author: string }> }) {
     const params = await props.params;
@@ -9,7 +9,7 @@ export default async function AuthorPageServer(props: { params: Promise<{ author
     const data = await authorAdvancedSearch(authorName);
 
     const userId = (await cookies()).get("userId")?.value;
-    return <AuthorPage userId={userId} pageEntries={data} author={authorName} />;
+    return <BaseBrowsePage userId={userId} pageEntries={data} title={"Snippets from &quot;" + params.author + "&quot;"} />;
 }
 /*
 

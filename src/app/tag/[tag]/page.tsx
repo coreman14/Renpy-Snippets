@@ -1,6 +1,6 @@
 import { tagAdvancedSearch } from "@/db/schema";
 import { cookies } from "next/headers";
-import TagPage from "./TagPage";
+import BaseBrowsePage from "@/app/components/ListEntries";
 
 export default async function TagPageServer(props: { params: Promise<{ tag: string }> }) {
     const params = await props.params;
@@ -11,7 +11,7 @@ export default async function TagPageServer(props: { params: Promise<{ tag: stri
       return (word[0]?.toUpperCase() || " ") + word.substring(1); 
     }).join(" ");
     const userId = (await cookies()).get("userId")?.value;
-    return <TagPage userId={userId} pageEntries={data} tag={tagName} />;
+    return <BaseBrowsePage userId={userId} pageEntries={data} title={"Snippets tagged &quot;" + params.tag + "&quot;"} />;
 }
 /*
 
