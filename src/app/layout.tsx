@@ -31,7 +31,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-        <div className={"header w-full sticky top-0 overflow-hidden p-2 bg-[var(--layout-bar-back)] text-base " + outfit.className}>
+        <div className={"header w-full sticky top-0 overflow-hidden p-2 bg-[var(--layout-bar-back)] text-base z-10 " + outfit.className}>
           <div className="flex flex-row">
           <div className="w-1/2 ">
             <LayoutLink href="/" text="Recent Submissions"></LayoutLink>
