@@ -1,6 +1,6 @@
 "use client";
 
-import { browseAdvancedSearchSingle } from "@/db/schema";
+import { browseAdvancedSearchGrouped } from "@/db/schema";
 import Link from "next/link";
 import { deleteSnippet } from "../api";
 import { useSearchParams } from "next/navigation";
@@ -12,7 +12,7 @@ import { blankLine } from "../utils/definitions";
 const maximumFilesToShow = 5;
 
 export default function GridView(props: {
-    itemsToDisplay: browseAdvancedSearchSingle[];
+    itemsToDisplay: browseAdvancedSearchGrouped[];
     showOnlyUserEntries?: boolean;
     userId?: string;
     showEditedTime?: boolean;
@@ -70,14 +70,14 @@ export default function GridView(props: {
                             {getTimeString(dateOfCall, !props.showEditedTime ? x.snippet.cdate : x.snippet.mdate)} Ago
                         </div>
 
-                        {x.snippet.description && (
-                            <div className="text-[var(--layout-bar-front) mt-2 text-base">
-                                {(x.snippet.description.split("\n")[0].replace(/(.{150})..+/, "$1…") + " ").padEnd(
-                                    150,
-                                    blankLine
-                                )}
-                            </div>
-                        )}
+                        
+                        <div className="text-[var(--layout-bar-front) mt-2 text-base">
+                            {((x.snippet.description|| "No description given").split("\n")[0].replace(/(.{150})..+/, "$1…") + " ").padEnd(
+                                150,
+                                blankLine
+                            )}
+                        </div>
+
 
                         <div className="mt-2 text-sm">
                             <div className="font-bold text-[var(--layout-bar-selected)] text-base">Files:</div>
