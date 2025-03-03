@@ -119,7 +119,37 @@ export const homePageResults = async function () {
     return getResultsAsArray(rows);
 };
 
-export const browseAdvancedSearch = async function (filterString: string) {
+export const browseCodeSearch = async function (filterString: string) {
+    filterString = `%${filterString}%`;
+    const ids = await db
+        .select({ id: renpyfilesTable.snippet_id })
+        .from(renpyfilesTable)
+        .where(
+            or(
+                like(renpyfilesTable.filename, filterString),
+                like(renpyfilesTable.code, filterString),
+
+            )
+        );
+    const rows = await db
+        .select({
+            snippet: renpyTable,
+            filename: renpyfilesTable.filename,
+        })
+        .from(renpyTable)
+        .leftJoin(renpyfilesTable, eq(renpyTable.id, renpyfilesTable.snippet_id))
+        .where(
+            and(
+                inArray(
+                    renpyTable.id,
+                    ids.map((x) => x.id || -1)
+                )
+            )
+        )
+        .all();
+    return getResultsAsArray(rows);
+};
+export const browseSimpleSearch = async function (filterString: string) {
     filterString = `%${filterString}%`;
     const ids = await db
         .select({ id: renpyTable.id })

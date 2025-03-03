@@ -1,11 +1,11 @@
 "use client";
 import { browseAdvancedSearchGrouped } from "@/db/schema";
 import Link from "next/link";
-import { deleteSnippet } from "../api";
+import { deleteSnippet } from "../../api";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { getTimeString } from "./snippetDisplayFunction";
-import { DeleteButton } from "./DeleteButton";
+import { getTimeString } from "../snippetTimeFunctions";
+import { DeleteButton } from "../DeleteButton";
 
 export default function ListView(props: {
     itemsToDisplay: browseAdvancedSearchGrouped[];

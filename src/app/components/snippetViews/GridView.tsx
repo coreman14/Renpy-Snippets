@@ -2,12 +2,12 @@
 
 import { browseAdvancedSearchGrouped } from "@/db/schema";
 import Link from "next/link";
-import { deleteSnippet } from "../api";
+import { deleteSnippet } from "../../api";
 import { useSearchParams } from "next/navigation";
-import { getTimeString } from "./snippetDisplayFunction";
+import { getTimeString } from "../snippetTimeFunctions";
 import { useState } from "react";
-import { DeleteButton } from "./DeleteButton";
-import { blankLine } from "../utils/definitions";
+import { DeleteButton } from "../DeleteButton";
+import { blankLine } from "../../utils/definitions";
 
 const maximumFilesToShow = 5;
 

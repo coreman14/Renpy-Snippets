@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Outfit } from "next/font/google";
 import "./globals.css";
-import SearchBar from "./components/searchInput";
-import LayoutLink from "./components/LayoutLink";
+import SearchBar from "./components/layoutButtons/layoutSearch";
+import LayoutLink from "./components/layoutButtons/LayoutLink";
 import { Suspense } from "react";
 
 const geistSans = Geist({

@@ -1,6 +1,6 @@
 import { catagoryAdvancedSearch } from "@/db/schema";
 import { cookies } from "next/headers";
-import BaseBrowsePage from "@/app/components/ListEntries";
+import BaseBrowsePage from "@/app/components/ListSnippetEntries";
 
 export default async function CatagoryPageServer(props: { params: Promise<{ catagory: string }> }) {
     const params = await props.params;

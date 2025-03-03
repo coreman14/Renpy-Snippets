@@ -1,6 +1,6 @@
 import { tagAdvancedSearch } from "@/db/schema";
 import { cookies } from "next/headers";
-import BaseBrowsePage from "@/app/components/ListEntries";
+import BaseBrowsePage from "@/app/components/ListSnippetEntries";
 
 export default async function TagPageServer(props: { params: Promise<{ tag: string }> }) {
     const params = await props.params;

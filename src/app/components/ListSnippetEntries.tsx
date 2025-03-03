@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { browseAdvancedSearchGrouped } from "@/db/schema";
 import { Nunito_Sans } from "next/font/google";
 import React from "react";
-import ViewSelector, { ViewType } from "../components/ViewSelector";
+import ViewSelector, { ViewType } from "./ViewSelector";
 import { getStoredViewPreference, setStoredViewPreference } from "../utils/storage";
 import { getSortFunction, sortOptions } from "../utils/browseUtils";
 import { ListView, GridView } from "../utils/browseUtils";

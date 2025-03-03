@@ -6,12 +6,12 @@ import dynamic from "next/dynamic";
 
 const LoadingView = () => <h1 className="text-2xl text-[var(--layout-bar-selected)]">Loading Snippets...</h1>
 
-export const ListView = dynamic(() => import("../components/ListView"), {
+export const ListView = dynamic(() => import("../components/snippetViews/ListView"), {
     ssr: false,
     loading: LoadingView
 });
 
-export const GridView = dynamic(() => import("../components/GridView"), {
+export const GridView = dynamic(() => import("../components/snippetViews/GridView"), {
     ssr: false,
     loading: LoadingView
 });
