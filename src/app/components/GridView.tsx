@@ -20,7 +20,7 @@ export default function GridView(props: {
     const [dateOfCall] = useState(new Date().getTime());
     const searchParams = useSearchParams();
     return (
-        <div className="flex flex-wrap gap-6 pb-3">
+        <div className="flex flex-wrap gap-6 pb-3 overflow-x-auto">
             {props.itemsToDisplay
                 .filter((x) => !props.showOnlyUserEntries || props.userId == x.snippet.cookie_id)
                 .map((x) => (
