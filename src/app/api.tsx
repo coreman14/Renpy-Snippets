@@ -33,7 +33,7 @@ export async function createSnippet(files: DB_renpyFileTable[], formData: FormDa
         .insertedId;
     const new_files = files.map((x) => ({ code: x.code, filename: x.filename, snippet_id: new_id }));
     await db.insert(renpyfilesTable).values(new_files);
-    redirect("/entry/" + new_id);
+    redirect("/snippet/" + new_id);
 }
 
 export async function editSnippet(files: DB_renpyFileTable[], formData: FormData) {
@@ -70,7 +70,7 @@ export async function editSnippet(files: DB_renpyFileTable[], formData: FormData
             await db.update(renpyfilesTable).set(file).where(eq(renpyfilesTable.id, file.id));
         }
     }
-    redirect("/entry/" + id);
+    redirect("/snippet/" + id);
 }
 
 export async function deleteSnippet(formData: FormData) {

@@ -339,7 +339,7 @@ function ViewCodePlace(props: { files: (typeof renpyfilesTable.$inferSelect)[] }
                     className="tab overflow-x-auto overflow-y-hidden pt-1 pb-1 min-w-fit"
                     style={{ scrollbarWidth: "none" }}
                 >
-                    <a className={"p-1 text-xl border-2 rounded-lg border-[var(--forground-buttons2)] hover"} href={"/entry/download/" + snippetId}>
+                    <a className={"p-1 text-xl border-2 rounded-lg border-[var(--forground-buttons2)] hover"} href={"/snippet/download/" + snippetId}>
                         <Image
                             className="inline-block align-text-top downloadButton"
                             src="/download.svg"

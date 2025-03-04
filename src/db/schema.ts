@@ -14,6 +14,12 @@ export const db = drizzle(
         : process.env.DB_FILE_NAME!
 );
 
+export const vanityLink = sqliteTable("vanity_links", {
+    id: int().primaryKey({ autoIncrement: true }),
+    snippet_id: int().references(() => renpyTable.id).notNull(),
+    url: text().notNull(),
+})
+
 export const renpyTable = sqliteTable("renpy_snippet", {
     id: int().primaryKey({ autoIncrement: true }),
     title: text().notNull(),

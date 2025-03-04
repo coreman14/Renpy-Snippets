@@ -1,9 +1,6 @@
 ## To-do List
-- [ ] Better Favicon.
 - [ ] Add import zip button. It takes a zip folder and adds every RPY it could find to the project.
-- [ ] Populate a filter tab that loads all tags/categories/authors, the works
 - [ ] Add Discord embed. I don't know how they work, but it would be cool to have it show all pages
-- [ ] Resource files (Images, music that I will compress to hell and back)
 - [ ] Better auth. The auth is currently setup to allow for ease of use rather than data protection.
 - [ ] When switching between large files, react-syntax-highlighter does slow down even if you use the lightweight version. Look into the proper way to do something like this
 - [ ] If the above goes well, add syntax highlighting to creating as well

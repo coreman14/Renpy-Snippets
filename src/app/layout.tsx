@@ -36,7 +36,7 @@ export default function RootLayout({
           <div className="w-1/2 ">
             <LayoutLink href="/" text="Recent Submissions"></LayoutLink>
             <LayoutLink href="/browse" text="Browse All"></LayoutLink>
-            <LayoutLink href="/entry/new" text="Create"></LayoutLink>
+            <LayoutLink href="/snippet/new" text="Create"></LayoutLink>
           </div>
           <div className="w-1/2" dir="rtl">
           <Suspense>

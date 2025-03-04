@@ -20,7 +20,7 @@ export default function ListView(props: {
         .map((x) => (
             <div key={x.snippet.id} className="pb-6 last-of-type:pb-4">
                 <div className="text-2xl text-[var(--forground-buttons)]">
-                    <Link title="View Snippet" href={"/entry/" + x.snippet.id}>
+                    <Link title="View Snippet" href={"/snippet/" + x.snippet.id}>
                         {x.snippet.title}
                     </Link>
                 </div>
@@ -66,7 +66,7 @@ export default function ListView(props: {
                     title={props.userId != x.snippet.cookie_id ? "User does not have modify permissions" : ""}
                 >
                     <fieldset inert={props.userId != x.snippet.cookie_id} className="*:inert:text-black">
-                        <Link href={"/entry/edit/" + x.snippet.id} title="Edit snippet">
+                        <Link href={"/snippet/edit/" + x.snippet.id} title="Edit snippet">
                             Edit
                         </Link>
                         <DeleteButton />

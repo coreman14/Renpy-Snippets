@@ -7,7 +7,7 @@ import { renpyfilesTable, renpyTable } from "@/db/schema";
 import Link from "next/link";
 import { useState } from "react";
 
-export default function EntryView(props: {
+export default function SnippetView(props: {
     entry: (typeof renpyTable.$inferSelect)[];
     entry_files: (typeof renpyfilesTable.$inferSelect)[];
     userId?: string;
@@ -94,7 +94,7 @@ export default function EntryView(props: {
                     action={deleteSnippet}
                     className="text-xl text-[var(--forground-buttons2)]"
                 >
-                        <Link href={"/entry/edit/" + entry.id} title="Edit snippet">
+                        <Link href={"/snippet/edit/" + entry.id} title="Edit snippet">
                             Edit
                         </Link>
                         <DeleteButton />

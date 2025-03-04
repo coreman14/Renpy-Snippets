@@ -29,7 +29,7 @@ export default function GridView(props: {
                         className="grow-0 shrink-0 basis-[calc(33%-1rem)] min-w-[300px] p-4 pt-2 pl-2 border-2 rounded-lg border-[var(--layout-bar-back)] flex-col flex pb-1"
                     >
                         <div className="text-2xl text-[var(--forground-buttons)]">
-                            <Link title="View Snippet" href={"/entry/" + x.snippet.id}>
+                            <Link title="View Snippet" href={"/snippet/" + x.snippet.id}>
                                 {x.snippet.title}
                             </Link>
                         </div>
@@ -81,7 +81,7 @@ export default function GridView(props: {
                             {x.filenames.slice(0, maximumFilesToShow).map((filename, index) => (
                                 <Link
                                     key={index}
-                                    href={`/entry/${x.snippet.id}?file=${index + 1}`}
+                                    href={`/snippet/${x.snippet.id}?file=${index + 1}`}
                                     className="block text-[var(--forground-buttons)] hover:underline max-w-fit"
                                     title={"View file " + filename}
                                 >
@@ -103,7 +103,7 @@ export default function GridView(props: {
 
                         <form action={deleteSnippet} className="text-[var(--forground-buttons2)] mt-auto pt-2 text-xl">
                             <fieldset inert={props.userId != x.snippet.cookie_id} className="*:inert:text-black">
-                                <Link href={"/entry/edit/" + x.snippet.id} title="Edit snippet">
+                                <Link href={"/snippet/edit/" + x.snippet.id} title="Edit snippet">
                                     Edit
                                 </Link>
                                 <DeleteButton />
