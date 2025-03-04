@@ -25,7 +25,7 @@ export default async function BrowsePageServer({
 
 
     const userId = (await cookies()).get("userId")?.value;
-    return <BaseBrowsePage userId={userId} pageEntries={data} title={searchString ? `Results for "${searchString}"` :  searchCode ? `Results for "${searchCode}"` : "Browse All"}/>
+    return <BaseBrowsePage userId={userId} pageEntries={data} title={searchString ? `Found ${data.length} snippets containing "${searchString}"` :  searchCode ? `Found ${data.length} snippets with code containing "${searchCode}"` : "Browse All"}/>
   }
   /*
 

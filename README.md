@@ -8,7 +8,6 @@
 - [ ] When switching between large files, react-syntax-highlighter does slow down even if you use the lightweight version. Look into the proper way to do something like this
 - [ ] If the above goes well, add syntax highlighting to creating as well
 - [ ] Custom URLs? I'd like to be able to link an entry and have a vanity link
-- [ ] Implementation pagination and different queries (Why do we need the code for the front page when all we need is the filenames?)
 
 
 
