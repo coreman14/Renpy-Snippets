@@ -58,7 +58,7 @@ export default function SnippetView(props: {
                         className={"inline hover align-text-bottom " + (vanityIsClicked ? "urlCopied" : "urlCopy")}
                         ref={urlRef}
                         onClick={() => copyUrlToClipboard()}
-                        ></Image>{vanityIsClicked && <span className="pl-2 text-green-500">Copied Short link</span>}
+                        ></Image>{vanityIsClicked && <span className="pl-2 text-[var(--correct-text)]">Copied Short link</span>}
                         </>
                     ) : (
                         ""

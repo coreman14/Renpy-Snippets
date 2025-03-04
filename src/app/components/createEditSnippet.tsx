@@ -113,7 +113,7 @@ export default function CreateOrEditSnippet(props: {
                 </label>
                 <div className="overflow-x-visible whitespace-nowrap">
                     <input
-                        className={"stanInput h-[100%] w-[100%] " + (state.message ? "border-red-500!" : "")}
+                        className={"stanInput h-[100%] w-[100%] " + (state.message ? "border-[var(--error-text)]!" : "")}
                         type="text"
                         name="vanity"
                         id="vanity"
@@ -126,7 +126,7 @@ export default function CreateOrEditSnippet(props: {
                     {vanityIsClicked && (
                         <span className="pl-2 w-fit">
                             
-                            <span className={"" + (vanity && !state.message ? "text-green-500" : "text-red-500")}>
+                            <span className={"" + (vanity && !state.message ? "text-[var(--correct-text)]" : "text-[var(--error-text)]")}>
                                 {state.message || (vanity && "Shortcut url: " + "/s/" + (formatVanityURLPath(vanity || ""))) || ""}
                                 
                             </span>
@@ -165,7 +165,7 @@ export default function CreateOrEditSnippet(props: {
                     ></textarea>
                 </div>
             </div>
-            <div className="text-red-500 text-2xl translate-x-[10.2rem] pb-1 max-w-fit">{descriptionErrorMessage}</div>
+            <div className="text-[var(--error-text)] text-2xl translate-x-[10.2rem] pb-1 max-w-fit">{descriptionErrorMessage}</div>
             <CodePlace files={files} setFiles={setFiles}></CodePlace>
             <SubmitButton
                 editMode={props.editing}
