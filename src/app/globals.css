@@ -75,7 +75,7 @@ body {
 }
 
 .inputForm label {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   text-align: end;
 }
 
@@ -88,9 +88,15 @@ body {
 #createViewForm .stanInput:focus {
   border-color: var(--layout-bar-back);
 }
-
+/*Get specifc colors from here https://codepen.io/sosuke/pen/Pjoqqp */
 img.downloadButton {
   filter: invert(47%) sepia(10%) saturate(2762%) hue-rotate(6deg) brightness(97%) contrast(72%);
+}
+img.urlCopy {
+  filter: invert(53%) sepia(7%) saturate(3251%) hue-rotate(6deg) brightness(88%) contrast(88%);
+}
+img.urlCopied {
+  filter: invert(37%) sepia(98%) saturate(844%) hue-rotate(110deg) brightness(95%) contrast(96%);
 }
 
 

@@ -1,6 +1,6 @@
 'use client'
 import { browseAdvancedSearchGrouped } from "@/db/schema";
-import { ListView, GridView } from "./utils/browseUtils";
+import { ListView, GridView } from "./utils/ListSnippetEntriesUtils";
 import Link from "next/link";
 import ViewSelector, { ViewType } from "./components/ViewSelector";
 import { useState, useEffect } from "react";

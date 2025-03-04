@@ -6,8 +6,8 @@ import { Nunito_Sans } from "next/font/google";
 import React from "react";
 import ViewSelector, { ViewType } from "./ViewSelector";
 import { getStoredViewPreference, setStoredViewPreference } from "../utils/storage";
-import { getSortFunction, sortOptions } from "../utils/browseUtils";
-import { ListView, GridView } from "../utils/browseUtils";
+import { getSortFunction, sortOptions } from "../utils/ListSnippetEntriesUtils";
+import { ListView, GridView } from "../utils/ListSnippetEntriesUtils";
 const roboto = Nunito_Sans({ weight: "500", subsets: ["latin"] });
 
 export default function BaseBrowsePage(props: { userId: string | undefined; pageEntries: browseAdvancedSearchGrouped[]; title: string }) {

@@ -15,8 +15,7 @@ export const db = drizzle(
 );
 
 export const vanityLink = sqliteTable("vanity_links", {
-    id: int().primaryKey({ autoIncrement: true }),
-    snippet_id: int().references(() => renpyTable.id).notNull(),
+    snippet_id: int().primaryKey().references(() => renpyTable.id).notNull(),
     url: text().notNull(),
 })
 
@@ -253,3 +252,12 @@ export const tagAdvancedSearch = async function (tag: string) {
         .all();
     return getResultsAsArray(rows);
 };
+
+export const isVanityLinkFree = async function(link: string, id: number = -1){
+    const rows = await db.select().from(vanityLink).where(eq(vanityLink.url, link))
+    //If given an ID, check if the record in the db with that id is the same as the link
+    if (id > 0 && rows.length == 1 && rows[0].snippet_id == id && rows[0].url == link){
+        return true
+    }
+    return rows.length == 0
+}
