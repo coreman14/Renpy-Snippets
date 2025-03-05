@@ -33,41 +33,23 @@ input, select, optgroup, textarea, ::file-selector-button {
 }
 
 :root {
-  --background: #a2c9db;
+  --background: #161819;
   --input-background: #27556C;
-  --forground-buttons: #3883A8;
-  --forground-buttons2: #fbff23;
+  --forground-buttons: #337492;
+  --forground-buttons2: #917938;
   --foreground: #FFFFFF;
-  --layout-bar-back: #FFA48C;
+  --layout-bar-back: #563329;
   --layout-bar-front: #FFE7E1;
-  --layout-bar-selected: #FF724D;
+  --layout-bar-selected: #ca7863;
   --error-text: #fb2c36;
-  --correct-text: #066e32;
+  --correct-text: #00c951;
   /*Get specifc colors from here https://codepen.io/sosuke/pen/Pjoqqp */
-  --svg-download: invert(86%) sepia(71%) saturate(541%) hue-rotate(7deg) brightness(109%) contrast(106%);
-  --svg-urlCopy: invert(94%) sepia(56%) saturate(1272%) hue-rotate(332deg) brightness(115%) contrast(107%);
-  --svg-urlCopied: invert(24%) sepia(59%) saturate(1839%) hue-rotate(121deg) brightness(99%) contrast(95%);
+  --svg-download: invert(47%) sepia(10%) saturate(2762%) hue-rotate(6deg) brightness(97%) contrast(72%);
+  --svg-urlCopy: invert(53%) sepia(7%) saturate(3251%) hue-rotate(6deg) brightness(88%) contrast(88%);
+  --svg-urlCopied: invert(37%) sepia(98%) saturate(844%) hue-rotate(110deg) brightness(95%) contrast(96%);
 
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #161819;
-    --input-background: #27556C;
-    --forground-buttons: #337492;
-    --forground-buttons2: #917938;
-    --foreground: #FFFFFF;
-    --layout-bar-back: #563329;
-    --layout-bar-front: #FFE7E1;
-    --layout-bar-selected: #ca7863;
-    --error-text: #fb2c36;
-    --correct-text: #00c951;
-    /*Get specifc colors from here https://codepen.io/sosuke/pen/Pjoqqp */
-    --svg-download: invert(47%) sepia(10%) saturate(2762%) hue-rotate(6deg) brightness(97%) contrast(72%);
-    --svg-urlCopy: invert(53%) sepia(7%) saturate(3251%) hue-rotate(6deg) brightness(88%) contrast(88%);
-    --svg-urlCopied: invert(37%) sepia(98%) saturate(844%) hue-rotate(110deg) brightness(95%) contrast(96%);
-  }
-}
 
 /*Get specifc colors from here https://codepen.io/sosuke/pen/Pjoqqp */
 img.downloadButton {

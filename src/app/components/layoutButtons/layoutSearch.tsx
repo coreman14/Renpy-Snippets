@@ -40,7 +40,7 @@ export default function SearchBar() {
             ></input>
             <span onClick={() => setsearchType(searchType == 0 ? 1 : 0)}
             dir="ltr"
-                className="hover pr-2 text-[var(--layout-bar-front)]"
+                className="hover pr-2 text-[var(--foreground)]"
                 title={"Change search type\nSearch Snippets: Check the Title, author, catagory, Tags and Description\nSearch code: Check each files name and contents"}
                 >
                 Search {searchType == 0 ? "Snippets" : "Code"}

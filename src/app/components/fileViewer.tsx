@@ -5,7 +5,7 @@ import { useRef, useState, KeyboardEvent, Dispatch, useEffect } from "react";
 
 //Light syntax cause I can't get it to not rerender
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
-import { darcula as darkTheme, nnfx as lightTheme } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { darcula as darkTheme } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import renpy from "react-syntax-highlighter/dist/esm/languages/hljs/python";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
@@ -271,11 +271,6 @@ function ViewCodePlace(props: { files: (typeof renpyfilesTable.$inferSelect)[] }
     const pathname = usePathname();
 
     const [currentTab, setCurrentTab] = useState(Math.max(parseInt(searchParams.get("file") || "1") - 1, 0));
-    let darkModeTheme = true;
-    if (typeof window !== "undefined") {
-        darkModeTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    }
-
     useEffect(() => {
         const nextSearchParams = new URLSearchParams(searchParams.toString());
         if (nextSearchParams.has("file")) {
@@ -284,13 +279,13 @@ function ViewCodePlace(props: { files: (typeof renpyfilesTable.$inferSelect)[] }
         }
     });
     const maxWidth = 98;
-    const maxHeight = "59vh";
+    const maxHeight = "56vh";
     const codeTabs = props.files.map((x, ind) => (
         <SyntaxHighlighter
             key={ind}
             customStyle={{ maxWidth: maxWidth + "vw", maxHeight: maxHeight }}
             language="renpy"
-            style={darkModeTheme ? darkTheme : lightTheme}
+            style={darkTheme}
             showLineNumbers={true}
         >
             {x.code}
