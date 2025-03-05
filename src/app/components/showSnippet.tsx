@@ -72,7 +72,7 @@ export default function SnippetView(props: {
                     {entry.author ? (
                         <>
                             <Link
-                                className="text-[var(--forground-buttons2)]"
+                                className="text-[var(--forground-buttons2)] underline"
                                 href={`/author/${encodeURIComponent(entry.author)}`}
                                 title={"See other snippets by " + entry.author}
                             >
@@ -88,7 +88,7 @@ export default function SnippetView(props: {
                     {entry.catagory ? (
                         <>
                             <Link
-                                className="text-[var(--forground-buttons2)]"
+                                className="text-[var(--forground-buttons2)] underline"
                                 href={`/catagory/${encodeURIComponent(entry.catagory)}`}
                                 title={"See snippets in catagory " + entry.catagory}
                             >
@@ -104,12 +104,12 @@ export default function SnippetView(props: {
                     {entry.tags
                         ? entry.tags.split(",").map((x, ind) => (
                               <span key={x}>
+                                  {" "}
                                   <Link
-                                      className="text-[var(--forground-buttons2)]"
+                                      className="text-[var(--forground-buttons2)] underline"
                                       href={`/tag/${encodeURIComponent(x)}`}
                                       title={"See snippets with tag " + x}
                                   >
-                                      {" "}
                                       {x.trim()}
                                   </Link>
                                   {entry.tags?.split(",").length != ind + 1 ? "," : ""}
@@ -125,7 +125,7 @@ export default function SnippetView(props: {
             {props.userId != entry.cookie_id ? (
                 ""
             ) : (
-                <form action={deleteSnippet} className="text-xl text-[var(--forground-buttons2)]">
+                <form action={deleteSnippet} className="text-2xl text-[var(--forground-buttons2)]">
                     <Link href={"/snippet/edit/" + entry.id} title="Edit snippet">
                         Edit
                     </Link>

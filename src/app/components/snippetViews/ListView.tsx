@@ -30,7 +30,7 @@ export default function ListView(props: {
                         <>
                             {"Author: "}
                             <Link
-                                className="text-[var(--forground-buttons2)]"
+                                className="text-[var(--forground-buttons2)] underline"
                                 href={`/author/${encodeURIComponent(x.snippet.author)}`}
                                 title={"See other snippets by " + x.snippet.author}
                             >
@@ -45,7 +45,7 @@ export default function ListView(props: {
                         <>
                             {"Catagory: "}
                             <Link
-                                className="text-[var(--forground-buttons2)]"
+                                className="text-[var(--forground-buttons2)] underline"
                                 href={`/catagory/${encodeURIComponent(x.snippet.catagory)}`}
                                 title={"See snippets in catagory " + x.snippet.catagory}
                             >

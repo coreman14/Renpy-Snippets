@@ -39,7 +39,7 @@ export default function GridView(props: {
                                 <>
                                     {"Author: "}
                                     <Link
-                                        className="text-[var(--forground-buttons2)]"
+                                        className="text-[var(--forground-buttons2)] underline"
                                         href={`/author/${encodeURIComponent(x.snippet.author)}`}
                                         title={"See other snippets by " + x.snippet.author}
                                     >
@@ -53,7 +53,7 @@ export default function GridView(props: {
                                 <>
                                     {"Catagory: "}
                                     <Link
-                                        className="text-[var(--forground-buttons2)]"
+                                        className="text-[var(--forground-buttons2)] underline"
                                         href={`/catagory/${encodeURIComponent(x.snippet.catagory)}`}
                                         title={"See snippets in catagory " + x.snippet.catagory}
                                     >
@@ -82,7 +82,7 @@ export default function GridView(props: {
                                 <Link
                                     key={index}
                                     href={`/snippet/${x.snippet.id}?file=${index + 1}`}
-                                    className="block text-[var(--forground-buttons)] hover:underline max-w-fit"
+                                    className="block text-[var(--forground-buttons)] hover:underline max-w-fit underline"
                                     title={"View file " + filename}
                                 >
                                     {filename}
@@ -101,8 +101,8 @@ export default function GridView(props: {
                             </span>
                         </div>
 
-                        <form action={deleteSnippet} className="text-[var(--forground-buttons2)] mt-auto pt-2 text-xl">
-                            <fieldset inert={props.userId != x.snippet.cookie_id} className="*:inert:text-black">
+                        <form action={deleteSnippet} className="text-[var(--forground-buttons2)] mt-auto pt-2 text-2xl">
+                            <fieldset inert={props.userId != x.snippet.cookie_id} className="*:inert:text-black ">
                                 <Link href={"/snippet/edit/" + x.snippet.id} title="Edit snippet">
                                     Edit
                                 </Link>
