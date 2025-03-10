@@ -22,7 +22,7 @@ export default function BaseBrowsePage(props: { userId: string | undefined; page
         setStoredViewPreference(view);
     };
     const [userEntries, setUserEntries] = useState(false);
-    const [pageEntries, setPageEntries] = useState(props.pageEntries);
+    const [pageEntries, setPageEntries] = useState(props.pageEntries || []);
     const [currentPage, setCurrentPage] = useState(1);
     const [resultsPerPage] = useState(21);
     const [sortBy, setSortBy] = useState(0);
