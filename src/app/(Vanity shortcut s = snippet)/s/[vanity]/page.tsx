@@ -7,7 +7,7 @@ export default async function ViewSnippetVanityLink(props: {
 }) {
   const params = await props.params;
   const vanity = params.vanity;
-  const id = (await db.select().from(vanityLink).where(eq(vanityLink.url, vanity)))[0].snippet_id
+  const id = (await db.select().from(vanityLink).where(eq(vanityLink.url, vanity)))[0]?.snippet_id || -1
   const [entry, entry_files] = await Promise.all([
     db.select().from(renpyTable).where(eq(renpyTable.id, id)),
     db.select().from(renpyfilesTable).where(eq(renpyfilesTable.snippet_id, id))
