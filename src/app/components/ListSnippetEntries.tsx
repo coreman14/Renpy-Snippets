@@ -22,7 +22,7 @@ export default function BaseBrowsePage(props: { userId: string | undefined; page
         setStoredViewPreference(view);
     };
     const [userEntries, setUserEntries] = useState(false);
-    const [pageEntries, setPageEntries] = useState(props.pageEntries || []);
+    const [pageEntries, setPageEntries] = useState(props.pageEntries);
     const [currentPage, setCurrentPage] = useState(1);
     const [resultsPerPage] = useState(21);
     const [sortBy, setSortBy] = useState(0);
@@ -37,7 +37,15 @@ export default function BaseBrowsePage(props: { userId: string | undefined; page
         setPageEntries(props.pageEntries)
         setCurrentPage(1)
     }
-    const sortedArray = pageEntries.toSorted(getSortFunction(sortBy));
+    let sortedArray;
+    try {
+        sortedArray = pageEntries.toSorted(getSortFunction(sortBy));
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    catch (err) {
+        sortedArray = pageEntries
+
+    }
     const filteredArray = userEntries ? sortedArray.filter(x => x.snippet.cookie_id === props.userId) : sortedArray;
     const totalPages = Math.ceil(filteredArray.length / resultsPerPage);
     if (filteredArray.length < (currentPage * resultsPerPage) && currentPage != 1 && currentPage != totalPages){ //Never let the current page be greater than the max page
