@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
+
 import { Geist, Geist_Mono, Outfit } from "next/font/google";
 import "./globals.css";
 import SearchBar from "./components/layoutButtons/layoutSearch";
 import LayoutLink from "./components/layoutButtons/LayoutLink";
 import { Suspense } from "react";
+import { base_metadata } from "./utils/baseMetaData";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,10 +16,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 const outfit = Outfit({weight: "400", subsets: ["latin"]});
-export const metadata: Metadata = {
-  title: "Renpy Snippets",
-  description: "App to create and share renpy snippets",
-};
+export const metadata = base_metadata;
 
 export default function RootLayout({
   children,
