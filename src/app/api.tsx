@@ -14,7 +14,16 @@ For button testing
 
 */
 
-export async function createSnippet(prevState: unknown, formData: FormData) {
+export type actionState = {
+    message: string,
+    title?: string,
+    author?: string,
+    catagory?: string,
+    tags?: string,
+    description?: string,
+  }
+
+export async function createSnippet(prevState: actionState, formData: FormData) {
     const cookiesStore = await cookies();
     if (!cookiesStore.get("userId")) {
         cookiesStore.set("userId", randomUUID().toString(), { maxAge: 999999999999999 });
@@ -56,7 +65,7 @@ export async function createSnippet(prevState: unknown, formData: FormData) {
     redirect("/snippet/" + new_id);
 }
 
-export async function editSnippet(prevState: unknown, formData: FormData) {
+export async function editSnippet(prevState: actionState, formData: FormData) {
     const cookiesStore = await cookies();
     if (!cookiesStore.get("userId")) {
         cookiesStore.set("userId", randomUUID().toString(), { maxAge: 999999999999999 });

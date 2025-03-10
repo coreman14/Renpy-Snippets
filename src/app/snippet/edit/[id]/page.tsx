@@ -3,7 +3,7 @@ import { renpyTable, db, renpyfilesTable, vanityLink } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { redirect } from 'next/navigation';
 import CreateOrEditSnippet from '@/app/components/createEditSnippet';
-import { editSnippet } from '@/app/api';
+
 export default async function ViewEntry(props: {
   params: Promise<{ id: number }>;
 }) {
@@ -17,6 +17,6 @@ export default async function ViewEntry(props: {
   if (entry[0].cookie_id != (await cookies()).get("userId")?.value){
     redirect("/browse")
   }
-  return <CreateOrEditSnippet entry={entry[0]} entry_files={entry_files} form_action={editSnippet} vanity={vanity[0]?.vanity}></CreateOrEditSnippet>
+  return <CreateOrEditSnippet entry={entry[0]} entry_files={entry_files} vanity={vanity[0]?.vanity}></CreateOrEditSnippet>
 
 }

@@ -8,24 +8,15 @@ import CodePlace from "./fileViewer";
 import { blankLine } from "../utils/definitions";
 import Image from "next/image";
 import { formatVanityURLPath } from "../utils/formValidation";
+import { actionState, createSnippet, editSnippet } from "../api";
 
 const maxDescriptionLength = 450;
 
 
-const initialState = {
-    message: '',
-    title: '',
-    author: '',
-    catagory: '',
-    tags: '',
-    description: '',
-  }
-
 export default function CreateOrEditSnippet(props: {
-    form_action: (state: void) => Promise<void> | void;
     entry_files: (typeof renpyfilesTable.$inferSelect)[];
     entry?: typeof renpyTable.$inferSelect;
-    editing?: boolean;
+    new_snippet?: boolean;
     vanity?: string;
 }) {
     const [files, setFiles] = useState(props.entry_files);
@@ -33,7 +24,9 @@ export default function CreateOrEditSnippet(props: {
     const [vanityIsClicked, setVanityIsClicked] = useState(false);
     const [vanity, setVanity] = useState(props.vanity || "");
     const authorRef = useRef<HTMLInputElement>(null);
-    const [state, formAction, pending] = useActionState(props.form_action, initialState)
+    const form_action = props.new_snippet ? createSnippet : editSnippet;
+    //@ts-expect-error The form action has to take in formdata, but this use action state does not like it.
+    const [state, formAction, pending] = useActionState<actionState>(form_action, {message: ''})
     const descriptionUpdate = function (x: HTMLTextAreaElement) {
         if (x.value.length > maxDescriptionLength) {
             setDescriptionErrorMessage(
@@ -62,7 +55,7 @@ export default function CreateOrEditSnippet(props: {
             <input type="hidden" name="id" id="id" value={props.entry?.id}></input>
             <input type="hidden" name="files" id="files" value={JSON.stringify(files)}></input>
             <h1 className="text-2xl text-[var(--layout-bar-selected)] pb-4 pt-2">
-                {props.editing ? "Create Snippet" : "Editing Snippet"}
+                {props.new_snippet ? "Create Snippet" : "Editing Snippet"}
             </h1>
             <div
                 className="grid grid-rows-7 w-[50%] gap-x-4 gap-y-1 inputForm pl-3"
@@ -168,7 +161,7 @@ export default function CreateOrEditSnippet(props: {
             <div className="text-[var(--error-text)] text-2xl translate-x-[10.2rem] pb-1 max-w-fit">{descriptionErrorMessage}</div>
             <CodePlace files={files} setFiles={setFiles}></CodePlace>
             <SubmitButton
-                editMode={props.editing}
+                editMode={props.new_snippet}
                 disable={pending || descriptionErrorMessage != blankLine}
                 beforeSubmit={updateUserStroage}
             />
