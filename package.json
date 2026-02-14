@@ -20,7 +20,7 @@
     "jszip": "^3.10.1",
     "libsql": "^0.5.0-pre.6",
     "next": "15.5.10",
-    "patch-package": "^8.0.0",
+    "patch-package": "^8.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-syntax-highlighter": "^15.6.1",
